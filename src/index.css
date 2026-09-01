@@ -1,0 +1,109 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  background: #0a0e17;
+  color: #f2efe6;
+}
+
+body {
+  font-family: 'Space Grotesk', sans-serif;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: #7fe7c4;
+  color: #08110d;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Custom cursor only on fine-pointer (non-touch) devices */
+@media (hover: hover) and (pointer: fine) {
+  body.cursor-enabled {
+    cursor: none;
+  }
+  body.cursor-enabled a,
+  body.cursor-enabled button {
+    cursor: none;
+  }
+}
+
+.eyebrow {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12.5px;
+  letter-spacing: 0.14em;
+  color: #7fe7c4;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.eyebrow::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #7fe7c4;
+  box-shadow: 0 0 10px #7fe7c4;
+  flex: none;
+}
+
+.wrap {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 0 48px;
+}
+@media (max-width: 700px) {
+  .wrap {
+    padding: 0 22px;
+  }
+}
+
+.term-cursor {
+  display: inline-block;
+  width: 6px;
+  height: 12px;
+  background: #7fe7c4;
+  vertical-align: -2px;
+  animation: blink 1s steps(1) infinite;
+}
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* thin scrollbar, matches the dark theme */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: #0a0e17;
+}
+::-webkit-scrollbar-thumb {
+  background: #1c2740;
+  border-radius: 8px;
+}

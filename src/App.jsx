@@ -1,0 +1,55 @@
+import React, { useState } from 'react'
+import { SoundProvider } from './context/SoundContext.jsx'
+import useLenis from './hooks/useLenis.js'
+import Preloader from './components/layout/Preloader.jsx'
+import Cursor from './components/layout/Cursor.jsx'
+import Navbar from './components/layout/Navbar.jsx'
+import Footer from './components/layout/Footer.jsx'
+import Hero from './components/sections/Hero.jsx'
+import Marquee from './components/sections/Marquee.jsx'
+import About from './components/sections/About.jsx'
+import Process from './components/sections/Process.jsx'
+import Skills from './components/sections/Skills.jsx'
+import Projects from './components/sections/Projects.jsx'
+import Achievements from './components/sections/Achievements.jsx'
+import Contact from './components/sections/Contact.jsx'
+import SectionHeading from './components/layout/SectionHeading.jsx'
+
+function Site() {
+  useLenis()
+
+  return (
+    <>
+      <Cursor />
+      <Navbar />
+      <main>
+        <Hero />
+        <Marquee />
+        
+        <About />
+        
+        <Process />
+        
+        <Skills />
+        
+        <Projects />
+        
+        <Achievements />
+        
+        <Contact />
+      </main>
+      <Footer />
+    </>
+  )
+}
+
+export default function App() {
+  const [loaded, setLoaded] = useState(false)
+
+  return (
+    <SoundProvider>
+      {!loaded && <Preloader onDone={() => setLoaded(true)} />}
+      {loaded && <Site />}
+    </SoundProvider>
+  )
+}
