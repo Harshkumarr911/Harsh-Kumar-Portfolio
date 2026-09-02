@@ -28,8 +28,8 @@ export default function About() {
               className="font-serif font-normal text-paperDim leading-[1.38]"
               style={{ fontSize: 'clamp(24px,3vw,34px)' }}
             >
-              Final-year Computer Science student at Allenhouse Institute of Technology,
-              graduating June 2026. Most of my time goes into backend architecture — layered
+              Computer Science Graduated from Allenhouse Institute of Technology,
+              June 2026. Most of my time goes into backend architecture — layered
               Spring Boot services, JWT security, Redis caching — and DSA, because clean code
               still has to run fast under pressure.
             </motion.p>
@@ -49,7 +49,7 @@ export default function About() {
 
             <div className="mt-12 border-t border-line pt-8">
               <div className="font-mono text-[11px] tracking-[0.1em] text-amber uppercase mb-5">
-                Currently
+                My Journey
               </div>
               <ul className="space-y-4">
                 {aboutTimeline.map((item, i) => (

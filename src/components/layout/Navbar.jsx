@@ -7,6 +7,7 @@ import { useSound } from '../../context/SoundContext.jsx'
 export default function Navbar() {
   const [active, setActive] = useState('about')
   const [open, setOpen] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
   const { enabled, toggle } = useSound()
 
   useEffect(() => {
@@ -27,32 +28,59 @@ export default function Navbar() {
     return () => observer.disconnect()
   }, [])
 
+  useEffect(() => {
+  const handleScroll = () => {
+    setScrolled(window.scrollY > 20)
+  }
+  window.addEventListener('scroll', handleScroll)
+  return () => window.removeEventListener('scroll', handleScroll)
+}, [])
+
   const scrollTo = (id) => {
     setOpen(false)
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
   }
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-[100]">
-      <div className="wrap flex items-center justify-between py-5">
+    <header className="fixed top-0 left-0 right-0 z-[100] pt-4 px-4 md:px-8 transition-all duration-300">
+      <div className={`wrap flex items-center justify-between py-3 px-5 rounded-full border transition-all duration-500 ${
+  scrolled
+    ? 'bg-[#080b13]/60 border-white/10 backdrop-blur-xl shadow-[0_10px_30px_rgba(0,0,0,0.5)]'
+    : 'bg-[#080b13]/20 border-white/5 backdrop-blur-md'
+}`}>
         <div className="flex items-center gap-2 font-mono text-[12.5px] text-paperDim">
           <MapPin size={13} className="opacity-80" />
           {profile.location}
         </div>
 
-        <nav className="hidden md:flex items-center gap-1 bg-[rgba(15,22,38,0.55)] border border-white/10 backdrop-blur-md rounded-full px-2 py-2">
-          {navLinks.map((link) => (
-            <button
-              key={link.id}
-              onClick={() => scrollTo(link.id)}
-              className={`px-4 py-1.5 rounded-full font-mono text-[12px] tracking-wide transition-colors ${
-                active === link.id ? 'bg-mint text-ink' : 'text-paperDim hover:text-paper'
-              }`}
-              data-cursor="link"
-            >
-              {link.label}
-            </button>
-          ))}
+        {/* DESKTOP NAV */}
+        <nav className="hidden md:flex items-center gap-1 bg-[#0f1626]/40 border border-white/10 backdrop-blur-xl rounded-full p-1.5 shadow-inner">
+          {navLinks.map((link) => {
+            // ---> CHANGE 5: Calculated isActive variable within scope to prevent scope errors
+            const isActive = active === link.id
+            return (
+              <button
+                key={link.id}
+                onClick={() => scrollTo(link.id)}
+                className={`relative px-4 py-1.5 rounded-full font-mono text-[12px] tracking-wide transition-all duration-300 ${
+                  isActive
+                    ? 'text-ink font-medium'
+                    : 'text-paperDim hover:text-paper'
+                }`}
+                data-cursor="link"
+              >
+                {/* ---> CHANGE 6: Added Framer Motion layoutId pill indicator */}
+                {isActive && (
+                  <motion.div
+                    layoutId="activePill"
+                    className="absolute inset-0 bg-mint rounded-full -z-10 shadow-[0_0_15px_rgba(127,231,196,0.4)]"
+                    transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+                  />
+                )}
+                {link.label}
+              </button>
+            )
+          })}
         </nav>
 
         <div className="flex items-center gap-2.5">

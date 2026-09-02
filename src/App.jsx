@@ -13,7 +13,9 @@ import Skills from './components/sections/Skills.jsx'
 import Projects from './components/sections/Projects.jsx'
 import Achievements from './components/sections/Achievements.jsx'
 import Contact from './components/sections/Contact.jsx'
-import SectionHeading from './components/layout/SectionHeading.jsx'
+import ScrollProgress from './components/ui/ScrollProgress.jsx'
+import BackToTop from './components/layout/BackToTop.jsx'
+import Chatbot from './components/layout/Chatbot.jsx'
 
 function Site() {
   useLenis()
@@ -21,6 +23,7 @@ function Site() {
   return (
     <>
       <Cursor />
+      <ScrollProgress />
       <Navbar />
       <main>
         <Hero />
@@ -39,6 +42,9 @@ function Site() {
         <Contact />
       </main>
       <Footer />
+      
+      <BackToTop />
+      <Chatbot />
     </>
   )
 }

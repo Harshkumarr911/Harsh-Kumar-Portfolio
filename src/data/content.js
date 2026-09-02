@@ -35,13 +35,13 @@ export const marqueeItems = [
   'MONGODB',
   'REDIS',
   'JWT / RBAC',
-  'KAFKA',
-  'THREE.JS',
+  'Html',
+  'CSS',
   'k6 LOAD TESTING',
 ]
 
 export const stats = [
-  { value: 4000, suffix: '+', label: 'PEAK THROUGHPUT (RPS), ATHLETE ARENA LOAD TEST' },
+  { value: 2026, suffix: '', label: 'QUALIFIED GATE CSE 2026 conducted by IIT Guwahati' },
   { value: 0, suffix: '%', label: 'REQUEST FAILURES ACROSS 100,000+ ITERATIONS' },
   { value: 80, suffix: '%', label: 'ACCURACY — NLP EMERGENCY CLASSIFIER, 6 TYPES' },
   { value: 150, suffix: '+', label: 'DSA PROBLEMS SOLVED ON LEETCODE' },
@@ -49,9 +49,11 @@ export const stats = [
 
 export const aboutTimeline = [
   { year: '2022', text: 'Started B.Tech, Computer Science & Engineering, Allenhouse Institute of Technology.' },
+  { year: '23-25', text: 'Continued academic and professional development. Skilled in Java, Spring Boot, React, MySQL, MongoDB etc.' },
+  {year: '2025', text: "Completed the Internship on MERN stack" },
   { year: '2025', text: 'Took over as Team Lead on Athlete Arena — architecture, sprint planning, delivery.' },
-  { year: '2025', text: 'Java Programming (Beginner to Advanced) certification, Crio.do.' },
-  { year: '2026', text: 'Graduating in June. Preparing for full-stack / backend developer roles.' },
+  {year: '2026', text: 'Make the Team #1 in the final year project evaluation, Athlete Arena, Allenhouse Institute of Technology.'},
+  { year: '2026', text: 'Graduated in June. Looking for full-stack / backend developer roles.' },
 ]
 
 export const processSteps = [
@@ -72,8 +74,8 @@ export const processSteps = [
   },
   {
     num: '04',
-    title: 'Prove',
-    text: 'Load test with k6, fix what breaks under pressure, then ship. 4,000+ RPS at 0% failure is measured, not assumed.',
+    title: 'Prove & Deploy',
+    text: 'Run the code, deploy it, and run the load test with k6,JMeter, or Postman. & deploy to live on Renderw. Monitor and iterate.',
   },
 ]
 
@@ -93,7 +95,8 @@ export const beyondSkills = [
   { num: '01', title: 'Team Leadership', text: 'Led a 4-member engineering team as Team Lead through a full project lifecycle.' },
   { num: '02', title: 'Ownership', text: 'Owned system design, architecture, and technical decisions end to end.' },
   { num: '03', title: 'Sprint Planning', text: 'Ran sprint planning and kept feature delivery on schedule.' },
-  { num: '04', title: 'Presenting to Faculty', text: 'Regularly presented architecture and progress to faculty mentors.' },
+  { num: '04', title: 'Collaboration', text: ' Collaborated with cross-functional member to deliver a high-quality product.' },
+
 ]
 
 export const projects = [
@@ -157,7 +160,7 @@ export const projects = [
     bullets: [
       'Real-time job listings and application tracking with WebSocket integration',
       'JWT-based authentication and role-based access control for users and employers',
-      'Implemented search and filter functionality for job listings using Elasticsearch',
+      'Implemented search and filter functionality for job listings using JPA and Specifications',
     ],
     tags: ['Spring Boot', 'React.js', 'MySQL',  'JWT', 'WebSocket'],
     metrics: [
@@ -177,14 +180,16 @@ export const projects = [
 
 export const featuredAchievement = {
   quote:
-    'Directed end-to-end technical execution — architecture, API design, feature delivery — while presenting progress to faculty mentors, and achieved the highest evaluation score among all teams on the project.',
-  attribution: 'faculty capstone evaluation, Athlete Arena, Allenhouse Institute of Technology',
+    'Lead the team as Team Lead, overseeing end-to-end technical execution — architecture, API design, feature delivery — while presenting progress to faculty mentors, and achieved the highest evaluation score among all teams on the project.',
+  
+  attribution: 'Final Year Project evaluation, Athlete Arena, Allenhouse Institute of Technology',
 }
 
 export const achievements = [
   { icon: 'Trophy', value: '#1 of all teams', label: 'Highest evaluation score, Athlete Arena capstone' },
-  { icon: 'Gauge', value: '4,000+ rps', label: '0% failure across 100K+ test iterations (k6)' },
-  { icon: 'Brain', value: '~80%', label: 'NLP classifier accuracy, 6 emergency types' },
-  { icon: 'Code2', value: '150+', label: 'DSA problems solved on LeetCode' },
+  {icon: 'Award', value: 'Gate Quailified', label: 'Qualified Gate CSE 2026' },
+  { icon: 'Award', value: 'Internship / Training', label: 'Internship - MERN Stack Technology -2025' },
+  { icon: 'Code2', value: '200+ DSA Problems', label: 'DSA problems solved on LeetCode & Geeks for Geeks' },
   { icon: 'Award', value: 'Crio.do', label: 'Java Programming, Beginner to Advanced — 2025' },
+  
 ]

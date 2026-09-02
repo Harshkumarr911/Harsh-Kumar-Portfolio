@@ -56,8 +56,8 @@ export default function Contact() {
           <em className="not-italic italic text-mint">that doesn't go down.</em>
         </motion.h2>
         <p className="mt-[22px] text-paperDim text-base">
-          Open to full-stack and backend developer roles — based in Kanpur, glad to relocate
-          anywhere in India.
+          Open to full-stack and backend developer roles —  Can relocate
+          anywhere in India *
         </p>
 
         <motion.div
