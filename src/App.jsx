@@ -43,11 +43,11 @@ function Site() {
 
         <About />
 
-        <Process />
+        <Projects />
 
         <Skills />
 
-        <Projects />
+        <Process />
 
         <Achievements />
 

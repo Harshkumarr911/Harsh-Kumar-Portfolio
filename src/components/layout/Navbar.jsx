@@ -61,19 +61,48 @@ export default function Navbar() {
   const { enabled, toggle } = useSound();
   const time = useIST();
 
-  // Prepend Home to navLinks (avoiding duplicates if already present)
+  // Prepend Home, swap Work/Projects <-> Process, and map Work to #projects
   const allLinks = useMemo(() => {
-    const filtered = navLinks.filter(
-      (link) => link.id !== "home" && link.id !== "hero"
+    const base = [
+      { id: "home", targetId: "home", label: "Home" },
+      ...navLinks
+        .filter((link) => link.id !== "home" && link.id !== "hero")
+        .map((link) => {
+          const isWork = link.id === "work" || link.id === "projects";
+          return {
+            ...link,
+            label: isWork ? "Work" : link.label,
+            targetId: isWork ? "projects" : link.id,
+          };
+        }),
+    ];
+
+    const processIdx = base.findIndex((item) => item.id === "process");
+    const workIdx = base.findIndex(
+      (item) => item.id === "work" || item.id === "projects"
     );
-    return [{ id: "home", label: "Home" }, ...filtered];
+
+    if (processIdx !== -1 && workIdx !== -1) {
+      [base[processIdx], base[workIdx]] = [base[workIdx], base[processIdx]];
+    }
+
+    return base;
   }, []);
 
-  // Active section tracking
+  // Active section tracking (maps #projects back to the Work nav item)
   useEffect(() => {
-    const elements = allLinks
-      .map((link) => document.getElementById(link.id))
-      .filter(Boolean);
+    const targetToNavId = new Map();
+    const elements = [];
+
+    allLinks.forEach((link) => {
+      const el =
+        document.getElementById(link.targetId) ||
+        document.getElementById(link.id);
+      if (el) {
+        targetToNavId.set(el.id, link.id);
+        elements.push(el);
+      }
+    });
 
     if (!elements.length) return;
 
@@ -84,7 +113,9 @@ export default function Navbar() {
           .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
 
         if (visible[0]) {
-          setActive(visible[0].target.id);
+          const matchedNavId =
+            targetToNavId.get(visible[0].target.id) || visible[0].target.id;
+          setActive(matchedNavId);
         }
       },
       {
@@ -141,9 +172,13 @@ export default function Navbar() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
 
-  const go = useCallback((id) => {
+  const go = useCallback((link) => {
+    const navId = typeof link === "string" ? link : link.id;
+    const domId = typeof link === "string" ? link : link.targetId || link.id;
+
     setOpen(false);
-    const element = document.getElementById(id);
+    const element =
+      document.getElementById(domId) || document.getElementById(navId);
 
     if (element) {
       element.scrollIntoView({
@@ -152,7 +187,7 @@ export default function Navbar() {
           : "smooth",
         block: "start",
       });
-      setActive(id);
+      setActive(navId);
     }
   }, []);
 
@@ -200,7 +235,7 @@ export default function Navbar() {
                 <button
                   key={link.id}
                   className={`hk-nav-item ${isActive ? "is-active" : ""}`}
-                  onClick={() => go(link.id)}
+                  onClick={() => go(link)}
                   aria-current={isActive ? "location" : undefined}
                   title={link.label}
                 >
@@ -343,7 +378,7 @@ export default function Navbar() {
               <button
                 key={link.id}
                 className={`hk-drawer-link ${isActive ? "is-active" : ""}`}
-                onClick={() => go(link.id)}
+                onClick={() => go(link)}
                 style={{ "--item-index": index }}
               >
                 <span className="hk-drawer-icon" aria-hidden="true">
