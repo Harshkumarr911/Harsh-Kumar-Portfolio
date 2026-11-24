@@ -7,7 +7,7 @@ import Cursor from './components/layout/Cursor.jsx'
 import Navbar from './components/layout/Navbar.jsx'
 import Footer from './components/layout/Footer.jsx'
 
-import Hero from './components/sections/Hero.jsx'
+// import Hero from './components/sections/Hero.jsx'
 import Marquee from './components/sections/Marquee.jsx'
 import About from './components/sections/About.jsx'
 import Process from './components/sections/Process.jsx'
@@ -15,10 +15,14 @@ import Skills from './components/sections/Skills.jsx'
 import Projects from './components/sections/Projects.jsx'
 import Achievements from './components/sections/Achievements.jsx'
 import Contact from './components/sections/Contact.jsx'
+import Hero2 from './components/sections/Hero2.jsx'
 
 import ScrollProgress from './components/ui/ScrollProgress.jsx'
 import BackToTop from './components/layout/BackToTop.jsx'
 import Chatbot from './components/layout/Chatbot.jsx'
+
+import NewNavbar from "./components/layout/NewNavbar";
+import Hero from "./components/home/Hero.jsx";
 
 
 function Site() {
@@ -35,7 +39,7 @@ function Site() {
       <main>
         <Hero />
 
-        <Marquee />
+        {/* <Marquee /> */}
 
         <About />
 
@@ -52,7 +56,7 @@ function Site() {
 
       <Footer />
 
-      <BackToTop />
+      {/* <BackToTop /> */}
 
       <Chatbot />
     </>

@@ -1,0 +1,503 @@
+@import url('https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap');
+
+/* ───────── tokens ───────── */
+:root {
+  --hk-bg: #efebe1;
+  --hk-cream: #efebe1;
+  --hk-dark: #0d0d0c;
+  --hk-ink: #0d0d0c;
+  --hk-mute: #6b675e;
+  --hk-line: rgba(13, 13, 12, 0.14);
+  --hk-accent: #e8482b;
+  --hk-rail: 200px;
+  --hk-pad: clamp(20px, 3vw, 40px);
+  --hk-serif: 'Bodoni Moda', Georgia, serif;
+  --hk-sans: 'Geist', system-ui, sans-serif;
+  --hk-mono: 'Geist Mono', ui-monospace, monospace;
+  --hk-ease: cubic-bezier(0.76, 0, 0.24, 1);
+}
+
+body {
+  background: var(--hk-bg);
+  color: var(--hk-ink);
+  font-family: var(--hk-sans);
+}
+
+/* content sits right of the fixed rail: no App.jsx change needed */
+@media (min-width: 1024px) {
+  body { padding-left: var(--hk-rail); }
+}
+
+.hk-label {
+  font: 500 10.5px/1.9 var(--hk-mono);
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--hk-mute);
+}
+
+/* ───────── square icon button ───────── */
+.hk-ibtn {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--hk-line);
+  border-radius: 2px;
+  background: none;
+  color: var(--hk-ink);
+  cursor: pointer;
+  transition: border-color 0.3s, color 0.3s;
+}
+.hk-ibtn:hover,
+.hk-ibtn[data-on='true'] { border-color: var(--hk-accent); color: var(--hk-accent); }
+
+/* ───────── desktop rail ───────── */
+.hk-rail { display: none; }
+
+@media (min-width: 1024px) {
+  .hk-rail {
+    position: fixed;
+    inset: 0 auto 0 0;
+    width: var(--hk-rail);
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    padding: 32px 0 28px 32px;
+    background: var(--hk-bg);
+    border-right: 1px solid var(--hk-line);
+  }
+  .hk-topbar,
+  .hk-menu { display: none !important; }
+}
+
+.hk-mark {
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  text-align: left;
+  font: 600 24px/1 var(--hk-serif);
+  color: var(--hk-ink);
+}
+.hk-mark span { color: var(--hk-accent); }
+
+.hk-links { margin-top: 64px; display: flex; flex-direction: column; gap: 4px; }
+
+.hk-link {
+  position: relative;
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  padding: 10px 0 10px 18px;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  text-align: left;
+  font: 500 11px/1 var(--hk-mono);
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--hk-mute);
+  transition: color 0.3s;
+}
+.hk-link:hover,
+.hk-link[data-on='true'] { color: var(--hk-ink); }
+.hk-link i {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 6px;
+  height: 6px;
+  background: var(--hk-accent);
+  transform: translateY(-50%) scale(0);
+  transition: transform 0.3s var(--hk-ease);
+}
+.hk-link[data-on='true'] i { transform: translateY(-50%) scale(1); }
+
+.hk-progress {
+  position: relative;
+  flex: 1;
+  width: 1px;
+  margin: 28px 0 28px 3px;
+  background: var(--hk-line);
+}
+.hk-progress b {
+  position: absolute;
+  inset: 0;
+  background: var(--hk-ink);
+  transform-origin: top;
+}
+
+.hk-foot { display: flex; flex-direction: column; gap: 14px; padding-right: 24px; }
+.hk-foot .hk-ibtn { width: 32px; height: 32px; }
+
+/* ───────── mobile bar + menu ───────── */
+.hk-topbar {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 100;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--hk-pad);
+  background: rgba(239, 235, 225, 0.92);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--hk-line);
+}
+.hk-topbar-actions { display: flex; gap: 8px; }
+
+.hk-menu {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 80px var(--hk-pad) 40px;
+  background: var(--hk-bg);
+}
+.hk-menu button {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  padding: 16px 0;
+  border: 0;
+  border-bottom: 1px solid var(--hk-line);
+  background: none;
+  text-align: left;
+  cursor: pointer;
+  font: 500 clamp(34px, 9vw, 52px)/1 var(--hk-serif);
+  color: var(--hk-ink);
+}
+.hk-menu button[data-on='true'] { color: var(--hk-accent); font-style: italic; }
+
+/* ───────── hero shell ───────── */
+.hk-hero {
+  position: relative;
+  padding: calc(60px + 20px) var(--hk-pad) var(--hk-pad);
+  overflow: hidden;
+}
+.hk-hero::before {              /* paper grain */
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+  opacity: 0.16;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.hk-poster {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 32px;
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
+.hk-top,
+.hk-steps,
+.hk-now { display: none; }
+
+@media (min-width: 1024px) {
+  .hk-hero { padding-top: 28px; }
+  .hk-poster {
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+    align-items: center;
+    min-height: min(88svh, 860px);
+    padding: 64px 0 24px;
+  }
+  .hk-top {
+    position: absolute;
+    inset: 0 0 auto 0;
+    z-index: 4;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .hk-steps { display: block; }
+  .hk-now { display: block; }
+}
+
+/* ───────── ribbon (behind text, over circle) ───────── */
+.hk-ribbon {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  mix-blend-mode: multiply;
+}
+
+/* ───────── copy ───────── */
+.hk-copy { position: relative; z-index: 3; }
+
+.hk-eyebrow { display: flex; align-items: center; gap: 14px; }
+.hk-eyebrow::after { content: ''; width: 56px; height: 1px; background: var(--hk-ink); opacity: 0.5; }
+
+.hk-h1 {
+  margin: 20px 0 0;
+  font: 400 clamp(46px, 7.2vw, 128px)/0.9 var(--hk-serif);
+  text-transform: uppercase;
+  letter-spacing: -0.03em;
+  color: var(--hk-ink);
+}
+.hk-line {
+  display: block;
+  padding-bottom: 0.04em;
+  clip-path: inset(0 -45% 0 0);      /* mask for reveal, lets ghosts spill right */
+}
+.hk-line > span { display: block; }
+
+.hk-bold { position: relative; display: inline-block; font-weight: 800; font-style: italic; }
+.hk-ghost {
+  position: absolute;
+  left: 0;
+  top: 0;
+  pointer-events: none;
+  opacity: calc(0.24 / var(--i));
+  transform: translateX(calc(var(--i) * 12px));
+  -webkit-mask-image: linear-gradient(90deg, transparent 25%, #000);
+  mask-image: linear-gradient(90deg, transparent 25%, #000);
+  animation: hk-trail 4s ease-in-out infinite alternate;
+}
+
+.hk-who { display: flex; align-items: center; gap: 14px; margin-top: 30px; }
+.hk-who::before { content: ''; width: 40px; height: 1px; background: var(--hk-ink); opacity: 0.5; }
+
+.hk-lede {
+  max-width: 48ch;
+  margin: 14px 0 0;
+  font-size: clamp(15px, 1.15vw, 17px);
+  line-height: 1.65;
+  color: var(--hk-mute);
+}
+.hk-lede strong { color: var(--hk-ink); font-weight: 500; }
+
+.hk-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
+.hk-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 15px 20px;
+  border: 1px solid var(--hk-ink);
+  border-radius: 2px;
+  font: 500 11px/1 var(--hk-mono);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--hk-ink);
+  transition: background 0.3s, border-color 0.3s, color 0.3s;
+}
+.hk-btn:hover { background: var(--hk-ink); color: var(--hk-cream); }
+.hk-btn svg { transition: transform 0.3s; }
+.hk-btn:hover svg { transform: translateX(4px); }
+.hk-btn--solid { background: var(--hk-ink); color: var(--hk-cream); }
+.hk-btn--solid:hover { background: var(--hk-accent); border-color: var(--hk-accent); color: var(--hk-ink); }
+
+/* ───────── orb (circle + ring + monogram/photo) ───────── */
+.hk-stage { position: relative; display: grid; place-items: center; }
+.hk-orb {
+  --orb: min(82vw, 420px);
+  position: relative;               /* no z-index → no stacking context, so layers interleave with ribbon */
+  width: var(--orb);
+  aspect-ratio: 1;
+}
+@media (min-width: 1024px) { .hk-orb { --orb: min(32vw, 520px); } }
+
+.hk-circle {
+  position: absolute;
+  inset: 12%;
+  z-index: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 28%, #ff7a55, #e8482b 58%, #b5321b);
+}
+.hk-ring {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  animation: hk-spin 45s linear infinite;
+}
+.hk-fg { position: absolute; inset: 12%; z-index: 2; display: grid; place-items: center; }
+.hk-mono-hk {
+  font: italic 500 clamp(64px, 9vw, 150px)/1 var(--hk-serif);
+  color: var(--hk-cream);
+}
+.hk-photo {
+  position: absolute;
+  bottom: -14%;
+  left: 50%;
+  height: 122%;
+  transform: translateX(-50%);
+  object-fit: contain;
+  filter: grayscale(1) contrast(1.2);
+}
+
+/* ───────── project stepper + now showing ───────── */
+.hk-steps { position: absolute; right: 0; top: 30%; z-index: 4; width: 170px; padding-left: 24px; }
+.hk-steps::before { content: ''; position: absolute; left: 4px; top: 6px; bottom: 6px; width: 1px; background: var(--hk-ink); opacity: 0.35; }
+.hk-steps button {
+  position: relative;
+  display: block;
+  width: 100%;
+  margin-bottom: 34px;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  text-align: left;
+  font: 500 10.5px/1.7 var(--hk-mono);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--hk-mute);
+  transition: color 0.3s;
+}
+.hk-steps button:last-child { margin-bottom: 0; }
+.hk-steps button::before {
+  content: '';
+  position: absolute;
+  left: -24px;
+  top: 3px;
+  width: 9px;
+  height: 9px;
+  border: 1px solid var(--hk-ink);
+  border-radius: 50%;
+  background: var(--hk-bg);
+  transition: background 0.3s, border-color 0.3s;
+}
+.hk-steps button[data-on='true'] { color: var(--hk-ink); }
+.hk-steps button[data-on='true']::before { background: var(--hk-accent); border-color: var(--hk-accent); }
+.hk-steps em { display: block; font-style: normal; color: var(--hk-mute); }
+
+.hk-now { position: absolute; right: 0; bottom: 16px; z-index: 4; max-width: 260px; text-align: right; }
+.hk-now strong { display: block; margin: 4px 0; font: 500 15px/1.3 var(--hk-sans); letter-spacing: 0.02em; }
+
+/* ───────── project cards ───────── */
+.hk-cards {
+  position: relative;
+  z-index: 3;
+  max-width: 1600px;
+  margin: 24px auto 0;
+  display: grid;
+  gap: 20px;
+  grid-template-columns: 1fr;
+}
+@media (min-width: 640px) { .hk-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 1024px) { .hk-cards { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+
+.hk-card {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 32px;
+  min-height: 300px;
+  padding: 24px;
+  overflow: hidden;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  background: var(--hk-dark);
+  color: var(--hk-cream);
+  text-decoration: none;
+  transition: border-color 0.4s;
+}
+.hk-card[data-active='true'] { border-color: var(--hk-accent); }
+.hk-card .hk-label { color: rgba(239, 235, 225, 0.7); }
+
+.hk-art { position: absolute; inset: 0; z-index: -2; transition: transform 1s var(--hk-ease); }
+.hk-card:hover .hk-art { transform: scale(1.05); }
+.hk-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(180deg, rgba(13, 13, 12, 0.55), transparent 35%, transparent 50%, rgba(13, 13, 12, 0.8));
+}
+
+.hk-card-top,
+.hk-card-bot { display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; }
+.hk-card-top { align-items: flex-start; }
+.hk-title { font: 500 19px/1.2 var(--hk-sans); letter-spacing: 0.04em; text-transform: uppercase; }
+.hk-desc { margin: 10px 0 0; max-width: 44ch; font-size: 14px; line-height: 1.55; color: rgba(239, 235, 225, 0.78); }
+.hk-go {
+  flex: none;
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(239, 235, 225, 0.5);
+  border-radius: 2px;
+  transition: background 0.3s, border-color 0.3s, color 0.3s;
+}
+.hk-card:hover .hk-go { background: var(--hk-accent); border-color: var(--hk-accent); color: var(--hk-dark); }
+
+/* ───────── card art (decorative only) ───────── */
+.hk-radar {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(180deg, #1b1110 0%, #3a1a14 50%, #c23a20 140%);
+}
+.hk-radar i {
+  grid-area: 1 / 1;
+  height: 62%;
+  aspect-ratio: 1;
+  border: 1px solid rgba(239, 235, 225, 0.5);
+  border-radius: 50%;
+  animation: hk-ripple 4.5s var(--d) ease-out infinite;
+}
+.hk-radar b {
+  grid-area: 1 / 1;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--hk-accent);
+  box-shadow: 0 0 18px 4px var(--hk-accent);
+}
+
+.hk-diamond {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(160deg, #a9a498, #7d786d);
+}
+.hk-diamond i {
+  position: relative;
+  width: 46%;
+  aspect-ratio: 1;
+  overflow: hidden;
+  transform: rotate(45deg);
+}
+.hk-diamond b {
+  position: absolute;
+  inset: -40%;
+  background: conic-gradient(#e8482b, #efe9e0, #6a55d8, #24193a, #e8482b);
+  animation: hk-spin 24s linear infinite;
+}
+
+.hk-bars { position: absolute; inset: 0; display: flex; align-items: flex-end; gap: 6px; padding: 0 24px; background: #0d0d0c; }
+.hk-bars i {
+  flex: 1;
+  height: var(--h);
+  transform-origin: bottom;
+  background: linear-gradient(to top, var(--hk-accent), transparent);
+  animation: hk-bar var(--d) ease-in-out infinite alternate;
+}
+
+@keyframes hk-trail { to { transform: translateX(calc(var(--i) * 28px)); } }
+@keyframes hk-spin { to { transform: rotate(360deg); } }
+@keyframes hk-ripple { 0% { transform: scale(0.2); opacity: 0.9; } 100% { transform: scale(1.5); opacity: 0; } }
+@keyframes hk-bar { from { transform: scaleY(0.3); } to { transform: scaleY(1); } }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}

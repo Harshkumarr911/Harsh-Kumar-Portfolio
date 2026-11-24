@@ -1,0 +1,407 @@
+/* ==========================================================================
+   CONTACT — INTERACTIVE SEALED ENVELOPE & SLIDING LINK CARD
+   ========================================================================== */
+.env-section {
+  --env-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --env-spring: cubic-bezier(0.34, 1.38, 0.64, 1);
+
+  padding-block: clamp(4.5rem, 8.5vw, 7.5rem);
+  background-color: var(--bg-canvas);
+  color: var(--text-main);
+  border-top: 1px solid var(--border-line);
+  transition: background-color 300ms ease, color 300ms ease;
+}
+
+.env-container {
+  width: 100%;
+  max-width: 1120px;
+  margin-inline: auto;
+  padding-inline: clamp(1.125rem, 4vw, 3rem);
+}
+
+/* ==========================================================================
+   1. BIG CONTACT HEADING
+   ========================================================================== */
+.env-header {
+  margin-bottom: clamp(2.75rem, 5.5vw, 4.25rem);
+}
+
+.env-kicker {
+  display: inline-block;
+  margin-bottom: 0.65rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--accent-crimson);
+}
+
+.env-big-heading {
+  margin: 0;
+  font-size: clamp(3.5rem, 9vw, 7.25rem);
+  font-weight: 700;
+  line-height: 0.94;
+  letter-spacing: -0.04em;
+  color: var(--text-main);
+}
+
+/* ==========================================================================
+   2 & 3. CENTERED ENVELOPE STAGE
+   ========================================================================== */
+.env-stage {
+  display: flex;
+  justify-content: center;
+  padding-top: 1.5rem;
+  perspective: 1400px;
+}
+
+.env-assembly {
+  position: relative;
+  width: 100%;
+  max-width: 680px;
+  min-height: 410px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  transition: min-height 520ms var(--env-ease);
+}
+
+.env-stage.is-open .env-assembly {
+  min-height: 580px;
+}
+
+/* Top Triangular Flap (Swings Open in 3D on Click) */
+.env-top-flap {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 155px;
+  z-index: 4;
+  transform-origin: top center;
+  transform-style: preserve-3d;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-hover);
+  border-radius: 12px 12px 0 0;
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  transition:
+    transform 580ms var(--env-ease),
+    opacity 400ms ease,
+    border-color 280ms ease;
+  pointer-events: none;
+}
+
+.env-stage.is-open .env-top-flap {
+  transform: rotateX(165deg);
+  opacity: 0.35;
+}
+
+/* Sliding Letter Sheet (Ejects Upwards When Opened) */
+.env-letter-sheet {
+  position: relative;
+  z-index: 2;
+  margin-inline: 4%;
+  margin-bottom: -145px;
+  padding: clamp(1.25rem, 2.8vw, 1.85rem);
+  border-radius: 10px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-hover);
+  box-shadow: 0 18px 42px rgba(0, 0, 0, 0.28);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(80px) scale(0.96);
+  transition:
+    transform 620ms var(--env-spring),
+    opacity 360ms ease,
+    margin-bottom 520ms var(--env-ease),
+    border-color 280ms ease;
+}
+
+.env-stage.is-open .env-letter-sheet {
+  opacity: 1;
+  pointer-events: auto;
+  margin-bottom: -36px;
+  transform: translateY(0) scale(1);
+  border-color: var(--accent-crimson);
+}
+
+.env-letter-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 0.85rem;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid var(--border-line);
+}
+
+.env-letter-title {
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent-crimson);
+}
+
+.env-close-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.36rem 0.7rem;
+  border-radius: 6px;
+  border: 1px solid var(--border-line);
+  background: var(--bg-canvas);
+  color: var(--text-main);
+  font-family: inherit;
+  font-size: 0.76rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 200ms ease, color 200ms ease;
+}
+
+.env-close-btn:hover {
+  border-color: var(--accent-crimson);
+  color: var(--accent-crimson);
+}
+
+/* Channel Rows Inside Sliding Letter */
+.env-links-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.env-link-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.65rem;
+  padding: 0.72rem 0.9rem;
+  border-radius: 8px;
+  background: var(--bg-canvas);
+  border: 1px solid var(--border-line);
+  opacity: 0;
+  transform: translateY(10px);
+  transition:
+    opacity 360ms var(--env-ease) calc(var(--i, 0) * 65ms),
+    transform 420ms var(--env-ease) calc(var(--i, 0) * 65ms),
+    border-color 200ms ease;
+}
+
+.env-stage.is-open .env-link-row {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.env-link-row:hover {
+  border-color: var(--accent-crimson);
+}
+
+.env-link-anchor {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  text-decoration: none;
+  color: var(--text-main);
+}
+
+.env-link-icon {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  flex-shrink: 0;
+  border-radius: 6px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-line);
+  color: var(--accent-crimson);
+}
+
+.env-link-meta {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.env-link-meta small {
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.env-link-meta strong {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text-main);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.env-link-arrow {
+  flex-shrink: 0;
+  color: var(--text-muted);
+  transition: transform 200ms var(--env-ease), color 200ms ease;
+}
+
+.env-link-anchor:hover .env-link-arrow {
+  color: var(--accent-crimson);
+  transform: translate(2px, -2px);
+}
+
+.env-copy-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.38rem 0.65rem;
+  border-radius: 5px;
+  border: 1px solid var(--border-line);
+  background: var(--bg-surface);
+  color: var(--text-main);
+  font-family: inherit;
+  font-size: 0.74rem;
+  font-weight: 600;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: border-color 180ms ease, color 180ms ease;
+}
+
+.env-copy-chip:hover {
+  border-color: var(--accent-crimson);
+  color: var(--accent-crimson);
+}
+
+/* ==========================================================================
+   FRONT ENVELOPE POCKET + CENTER WAX SEAL & OPEN BUTTON
+   ========================================================================== */
+.env-pocket-body {
+  position: relative;
+  z-index: 3;
+  width: 100%;
+  height: 295px;
+  border-radius: 12px;
+  background: linear-gradient(180deg, var(--bg-surface) 0%, var(--bg-canvas) 100%);
+  border: 1px solid var(--border-hover);
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.24);
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  transition:
+    height 480ms var(--env-ease),
+    border-color 280ms ease,
+    transform 420ms var(--env-ease);
+}
+
+.env-stage.is-open .env-pocket-body {
+  height: 150px;
+  border-color: var(--accent-crimson);
+}
+
+/* Subtle Airmail-Inspired Border Stripes + Diagonal Pocket Creases */
+.env-pocket-body::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 5px;
+  border-radius: 12px;
+  background: repeating-linear-gradient(
+    -45deg,
+    var(--accent-crimson) 0px,
+    var(--accent-crimson) 7px,
+    transparent 7px,
+    transparent 14px,
+    var(--border-hover) 14px,
+    var(--border-hover) 21px,
+    transparent 21px,
+    transparent 28px
+  );
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+.env-pocket-folds {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(28deg, transparent 49.5%, var(--border-line) 50%, transparent 50.5%),
+    linear-gradient(-28deg, transparent 49.5%, var(--border-line) 50%, transparent 50.5%);
+  opacity: 0.75;
+  pointer-events: none;
+}
+
+/* Center Wax Seal + Open Button */
+.env-center-seal-group {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.env-open-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.55rem 1.25rem 0.55rem 0.6rem;
+  border-radius: 999px;
+  border: 1px solid var(--accent-crimson);
+  background: var(--bg-canvas);
+  color: var(--text-main);
+  font-family: inherit;
+  font-size: 0.92rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.32);
+  transition:
+    transform 340ms var(--env-spring),
+    background-color 220ms ease,
+    color 220ms ease,
+    box-shadow 260ms ease;
+}
+
+.env-open-btn:hover {
+  transform: scale(1.06) translateY(-2px);
+  background: var(--accent-crimson);
+  color: #ffffff;
+  box-shadow: 0 14px 32px rgba(224, 62, 54, 0.38);
+}
+
+.env-wax-badge {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--accent-crimson);
+  color: #ffffff;
+  font-size: 0.76rem;
+  font-weight: 800;
+  box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.28);
+  transition: background-color 220ms ease, color 220ms ease;
+}
+
+.env-open-btn:hover .env-wax-badge {
+  background: #ffffff;
+  color: var(--accent-crimson);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .env-top-flap,
+  .env-letter-sheet,
+  .env-link-row,
+  .env-pocket-body,
+  .env-open-btn,
+  .env-assembly {
+    transition: none !important;
+    animation: none !important;
+  }
+}

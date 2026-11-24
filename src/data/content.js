@@ -3,7 +3,7 @@ export const profile = {
   initials: 'HK',
   role: 'Software Developer',
   tagline: 'Backend that holds the line under load.',
-  location: 'Kanpur, IN',
+  location: 'Gurugram/ Noida, IN',
   status: 'Open to full-stack roles',
   email: 'harshkumarr9251@gmail.com',
   phone: '+91 9555617287',

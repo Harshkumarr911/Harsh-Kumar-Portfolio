@@ -53,7 +53,7 @@ export default function Cursor() {
           width: onLink ? 56 : 34,
           height: onLink ? 56 : 34,
           backgroundColor: onLink ? 'rgba(127,231,196,0.08)' : 'rgba(127,231,196,0)',
-          borderColor: onLink ? '#7fe7c4' : 'rgba(127,231,196,0.5)',
+          borderColor: onLink ? '#e07fe7' : 'rgba(137, 25, 119, 0.5)',
         }}
         transition={{ duration: 0.25 }}
         style={{ x: ringX, y: ringY, translateX: '-50%', translateY: '-50%' }}

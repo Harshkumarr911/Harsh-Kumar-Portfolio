@@ -1,0 +1,37 @@
+:root {
+  /* Backgrounds */
+  --color-bg: #080808;
+  --color-bg-soft: #101010;
+  --color-surface: #151515;
+  --color-surface-hover: #1c1c1c;
+
+  /* Typography */
+  --color-text: #f1f0ec;
+  --color-muted: #92918d;
+  --color-subtle: #62615e;
+
+  /* Accent */
+  --color-accent: #c5a46d;
+  --color-accent-light: #ddc49c;
+
+  /* Borders */
+  --color-border: rgba(255, 255, 255, 0.12);
+  --color-border-hover: rgba(255, 255, 255, 0.3);
+
+  /* Typography */
+  --font-display: "Cormorant Garamond", Georgia, serif;
+  --font-body: "Inter", Arial, sans-serif;
+
+  /* Layout */
+  --container-width: 1440px;
+  --page-padding: clamp(22px, 5.5vw, 88px);
+
+  /* Motion */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-smooth: cubic-bezier(0.65, 0, 0.35, 1);
+
+  /* Timing */
+  --transition-fast: 220ms;
+  --transition-normal: 450ms;
+  --transition-slow: 750ms;
+}

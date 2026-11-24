@@ -1,138 +1,400 @@
-import React, { useEffect, useState } from 'react'
-import { AnimatePresence, motion } from 'framer-motion'
-import { Menu, X, Volume2, VolumeX, MapPin } from 'lucide-react'
-import { navLinks, profile } from '../../data/content.js'
-import { useSound } from '../../context/SoundContext.jsx'
+import React, { useEffect, useState, useCallback, useMemo } from "react";
+import {
+  House,
+  User,
+  GitBranch,
+  Code,
+  FolderSimple,
+  Trophy,
+  EnvelopeSimple,
+  ArrowUpRight,
+  SpeakerHigh,
+  SpeakerSlash,
+  List,
+  X,
+} from "@phosphor-icons/react";
+import { navLinks, profile } from "../../data/content.js";
+import { useSound } from "../../context/SoundContext.jsx";
+import "../../styles/navbar.css";
 
-export default function Navbar() {
-  const [active, setActive] = useState('about')
-  const [open, setOpen] = useState(false)
-  const [scrolled, setScrolled] = useState(false)
-  const { enabled, toggle } = useSound()
+const SECTION_ICONS = {
+  home: House,
+  hero: House,
+  about: User,
+  process: GitBranch,
+  skills: Code,
+  work: FolderSimple,
+  projects: FolderSimple,
+  achievements: Trophy,
+  contact: EnvelopeSimple,
+};
+
+function useIST() {
+  const [time, setTime] = useState("");
 
   useEffect(() => {
-    const sections = navLinks
-      .map((l) => document.getElementById(l.id))
-      .filter(Boolean)
+    const updateTime = () => {
+      setTime(
+        new Intl.DateTimeFormat("en-IN", {
+          timeZone: "Asia/Kolkata",
+          hour: "2-digit",
+          minute: "2-digit",
+          hour12: false,
+        }).format(new Date())
+      );
+    };
+
+    updateTime();
+    const interval = window.setInterval(updateTime, 30000);
+    return () => window.clearInterval(interval);
+  }, []);
+
+  return time;
+}
+
+export default function Navbar() {
+  const [active, setActive] = useState("home");
+  const [open, setOpen] = useState(false);
+  const [expanded, setExpanded] = useState(false);
+  const [progress, setProgress] = useState(0);
+
+  const { enabled, toggle } = useSound();
+  const time = useIST();
+
+  // Prepend Home to navLinks (avoiding duplicates if already present)
+  const allLinks = useMemo(() => {
+    const filtered = navLinks.filter(
+      (link) => link.id !== "home" && link.id !== "hero"
+    );
+    return [{ id: "home", label: "Home" }, ...filtered];
+  }, []);
+
+  // Active section tracking
+  useEffect(() => {
+    const elements = allLinks
+      .map((link) => document.getElementById(link.id))
+      .filter(Boolean);
+
+    if (!elements.length) return;
 
     const observer = new IntersectionObserver(
       (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) setActive(entry.target.id)
-        })
+        const visible = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+
+        if (visible[0]) {
+          setActive(visible[0].target.id);
+        }
       },
-      { rootMargin: '-45% 0px -45% 0px', threshold: 0 }
-    )
+      {
+        rootMargin: "-20% 0px -55% 0px",
+        threshold: [0, 0.15, 0.3, 0.5, 0.75],
+      }
+    );
 
-    sections.forEach((s) => observer.observe(s))
-    return () => observer.disconnect()
-  }, [])
+    elements.forEach((element) => observer.observe(element));
+    return () => observer.disconnect();
+  }, [allLinks]);
 
+  // Page scroll progress
   useEffect(() => {
-  const handleScroll = () => {
-    setScrolled(window.scrollY > 20)
-  }
-  window.addEventListener('scroll', handleScroll)
-  return () => window.removeEventListener('scroll', handleScroll)
-}, [])
+    let ticking = false;
 
-  const scrollTo = (id) => {
-    setOpen(false)
-    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
-  }
+    const updateProgress = () => {
+      if (ticking) return;
+      ticking = true;
+
+      window.requestAnimationFrame(() => {
+        const scrollable =
+          document.documentElement.scrollHeight - window.innerHeight;
+        const current =
+          scrollable > 0 ? (window.scrollY / scrollable) * 100 : 0;
+
+        setProgress(Math.min(100, Math.max(0, current)));
+        ticking = false;
+      });
+    };
+
+    updateProgress();
+    window.addEventListener("scroll", updateProgress, { passive: true });
+    window.addEventListener("resize", updateProgress);
+
+    return () => {
+      window.removeEventListener("scroll", updateProgress);
+      window.removeEventListener("resize", updateProgress);
+    };
+  }, []);
+
+  // Prevent background scrolling when mobile drawer is open
+  useEffect(() => {
+    document.body.classList.toggle("nav-drawer-open", open);
+    return () => document.body.classList.remove("nav-drawer-open");
+  }, [open]);
+
+  // Escape key closes drawer
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.key === "Escape") setOpen(false);
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
+
+  const go = useCallback((id) => {
+    setOpen(false);
+    const element = document.getElementById(id);
+
+    if (element) {
+      element.scrollIntoView({
+        behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
+          ? "auto"
+          : "smooth",
+        block: "start",
+      });
+      setActive(id);
+    }
+  }, []);
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-[100] pt-4 px-4 md:px-8 transition-all duration-300">
-      <div className={`wrap flex items-center justify-between py-3 px-5 rounded-full border transition-all duration-500 ${
-  scrolled
-    ? 'bg-[#080b13]/60 border-white/10 backdrop-blur-xl shadow-[0_10px_30px_rgba(0,0,0,0.5)]'
-    : 'bg-[#080b13]/20 border-white/5 backdrop-blur-md'
-}`}>
-        <div className="flex items-center gap-2 font-mono text-[12.5px] text-paperDim">
-          <MapPin size={13} className="opacity-80" />
-          {profile.location}
+    <>
+      {/* DESKTOP SIDEBAR */}
+      <aside
+        className={`hk-sidebar ${expanded ? "is-expanded" : ""}`}
+        onMouseEnter={() => setExpanded(true)}
+        onMouseLeave={() => setExpanded(false)}
+        aria-label="Main navigation"
+      >
+        <div className="hk-sidebar-inner">
+          {/* BRAND */}
+          <button
+            className="hk-brand"
+            onClick={() => go("home")}
+            aria-label="Harsh Kumar - back to home"
+          >
+            <img
+              src="/Portfolio-Favicon.png"
+              alt=""
+              className="hk-brand-image"
+            />
+            <span className="hk-brand-name">
+              HARSH KUMAR
+              <small>SOFTWARE ENGINEER</small>
+            </span>
+          </button>
+
+          <div className="hk-sidebar-divider" />
+
+          {/* NAVIGATION */}
+          <div className="hk-nav-caption">
+            <span>MENU</span>
+            <span className="hk-caption-line" />
+          </div>
+
+          <nav className="hk-nav-list">
+            {allLinks.map((link, index) => {
+              const isActive = active === link.id;
+              const IconComponent = SECTION_ICONS[link.id] || FolderSimple;
+
+              return (
+                <button
+                  key={link.id}
+                  className={`hk-nav-item ${isActive ? "is-active" : ""}`}
+                  onClick={() => go(link.id)}
+                  aria-current={isActive ? "location" : undefined}
+                  title={link.label}
+                >
+                  <span className="hk-nav-icon" aria-hidden="true">
+                    <IconComponent
+                      size={18}
+                      weight={isActive ? "fill" : "regular"}
+                    />
+                  </span>
+
+                  <span className="hk-nav-text">
+                    <small className="hk-nav-num">
+                      {String(index).padStart(2, "0")}
+                    </small>
+                    {link.label}
+                  </span>
+
+                  <span className="hk-nav-arrow" aria-hidden="true">
+                    <ArrowUpRight size={14} weight="bold" />
+                  </span>
+                </button>
+              );
+            })}
+          </nav>
+
+          {/* BOTTOM AREA */}
+          <div className="hk-sidebar-bottom">
+            <div className="hk-scroll-label">
+              <span>SCROLL PROGRESS</span>
+              <span>{Math.round(progress)}%</span>
+            </div>
+
+            <div
+              className="hk-progress-track"
+              role="progressbar"
+              aria-label="Page scroll progress"
+              aria-valuemin={0}
+              aria-valuemax={100}
+              aria-valuenow={Math.round(progress)}
+            >
+              <span
+                className="hk-progress-fill"
+                style={{ width: `${progress}%` }}
+              />
+            </div>
+
+            <div className="hk-sidebar-divider" />
+
+            <div className="hk-status">
+              <span className="hk-status-dot" />
+              <div className="hk-status-copy">
+                <strong>OPEN TO WORK</strong>
+                <span>{profile.location}</span>
+                <span>INDIA · {time || "--:--"} IST</span>
+              </div>
+            </div>
+
+            <div className="hk-sidebar-controls">
+              <span>INTERFACE SOUND</span>
+              <button
+                className={`hk-sound-button ${enabled ? "sound-enabled" : ""}`}
+                onClick={toggle}
+                aria-label={
+                  enabled ? "Mute interface sound" : "Enable interface sound"
+                }
+                aria-pressed={enabled}
+              >
+                {enabled ? (
+                  <SpeakerHigh size={16} weight="regular" />
+                ) : (
+                  <SpeakerSlash size={16} weight="regular" />
+                )}
+              </button>
+            </div>
+
+            <div className="hk-sidebar-copyright">© 2026 HARSH KUMAR</div>
+          </div>
+        </div>
+      </aside>
+
+      {/* MOBILE MENU TRIGGER */}
+      <button
+        className={`hk-mobile-trigger ${open ? "is-open" : ""}`}
+        onClick={() => setOpen((previous) => !previous)}
+        aria-label={open ? "Close navigation" : "Open navigation"}
+        aria-expanded={open}
+        aria-controls="hk-mobile-drawer"
+      >
+        {open ? (
+          <X size={20} weight="bold" />
+        ) : (
+          <List size={20} weight="bold" />
+        )}
+      </button>
+
+      {/* MOBILE DRAWER BACKDROP */}
+      <div
+        className={`hk-drawer-backdrop ${open ? "is-visible" : ""}`}
+        onClick={() => setOpen(false)}
+        aria-hidden="true"
+      />
+
+      {/* MOBILE DRAWER */}
+      <aside
+        id="hk-mobile-drawer"
+        className={`hk-mobile-drawer ${open ? "is-open" : ""}`}
+        aria-label="Mobile navigation"
+        aria-hidden={!open}
+        inert={!open}
+      >
+        <div className="hk-drawer-header">
+          <button className="hk-drawer-brand" onClick={() => go("home")}>
+            <img src="/Portfolio-Favicon.png" alt="" />
+            <span>
+              HARSH KUMAR
+              <small>SOFTWARE ENGINEER</small>
+            </span>
+          </button>
+
+          <button
+            className="hk-drawer-close"
+            onClick={() => setOpen(false)}
+            aria-label="Close menu"
+          >
+            <X size={18} weight="bold" />
+          </button>
         </div>
 
-        {/* DESKTOP NAV */}
-        <nav className="hidden md:flex items-center gap-1 bg-[#0f1626]/40 border border-white/10 backdrop-blur-xl rounded-full p-1.5 shadow-inner">
-          {navLinks.map((link) => {
-            // ---> CHANGE 5: Calculated isActive variable within scope to prevent scope errors
-            const isActive = active === link.id
+        <div className="hk-drawer-heading">
+          <span>EXPLORE</span>
+          <span>00 — 0{allLinks.length - 1}</span>
+        </div>
+
+        <nav className="hk-drawer-links">
+          {allLinks.map((link, index) => {
+            const isActive = active === link.id;
+            const IconComponent = SECTION_ICONS[link.id] || FolderSimple;
+
             return (
               <button
                 key={link.id}
-                onClick={() => scrollTo(link.id)}
-                className={`relative px-4 py-1.5 rounded-full font-mono text-[12px] tracking-wide transition-all duration-300 ${
-                  isActive
-                    ? 'text-ink font-medium'
-                    : 'text-paperDim hover:text-paper'
-                }`}
-                data-cursor="link"
+                className={`hk-drawer-link ${isActive ? "is-active" : ""}`}
+                onClick={() => go(link.id)}
+                style={{ "--item-index": index }}
               >
-                {/* ---> CHANGE 6: Added Framer Motion layoutId pill indicator */}
-                {isActive && (
-                  <motion.div
-                    layoutId="activePill"
-                    className="absolute inset-0 bg-mint rounded-full -z-10 shadow-[0_0_15px_rgba(127,231,196,0.4)]"
-                    transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+                <span className="hk-drawer-icon" aria-hidden="true">
+                  <IconComponent
+                    size={19}
+                    weight={isActive ? "fill" : "regular"}
                   />
-                )}
-                {link.label}
+                </span>
+
+                <span className="hk-drawer-link-name">{link.label}</span>
+
+                <span className="hk-drawer-link-arrow" aria-hidden="true">
+                  <ArrowUpRight size={16} weight="bold" />
+                </span>
               </button>
-            )
+            );
           })}
         </nav>
 
-        <div className="flex items-center gap-2.5">
-          <button
-            onClick={toggle}
-            aria-label="Toggle sound"
-            title="Toggle UI sound"
-            className="w-[38px] h-[38px] rounded-full border flex items-center justify-center transition-colors"
-            style={{
-              borderColor: enabled ? '#7fe7c4' : 'rgba(233,231,222,0.12)',
-              color: enabled ? '#7fe7c4' : '#f2efe6',
-              background: 'rgba(15,22,38,0.5)',
-            }}
-            data-cursor="link"
-          >
-            {enabled ? <Volume2 size={16} /> : <VolumeX size={16} />}
-          </button>
+        <div className="hk-drawer-bottom">
+          <div className="hk-drawer-status">
+            <span className="hk-status-dot" />
+            <span>AVAILABLE FOR OPPORTUNITIES</span>
+          </div>
 
-          <button
-            className="md:hidden w-[38px] h-[38px] rounded-full border border-white/10 bg-[rgba(15,22,38,0.5)] flex items-center justify-center"
-            onClick={() => setOpen((o) => !o)}
-            aria-label="Toggle menu"
-            data-cursor="link"
-          >
-            {open ? <X size={16} /> : <Menu size={16} />}
-          </button>
+          <div className="hk-drawer-details">
+            <span>{profile.location}</span>
+            <span>{time || "--:--"} IST</span>
+          </div>
+
+          <div className="hk-drawer-controls">
+            <span>INTERFACE SOUND</span>
+            <button
+              className={`hk-sound-button ${enabled ? "sound-enabled" : ""}`}
+              onClick={toggle}
+              aria-label={
+                enabled ? "Mute interface sound" : "Enable interface sound"
+              }
+              aria-pressed={enabled}
+            >
+              {enabled ? (
+                <SpeakerHigh size={16} weight="regular" />
+              ) : (
+                <SpeakerSlash size={16} weight="regular" />
+              )}
+            </button>
+          </div>
+
+          <span className="hk-drawer-copyright">HARSH KUMAR © 2026</span>
         </div>
-      </div>
-
-      <AnimatePresence>
-        {open && (
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.2 }}
-            className="md:hidden mx-5 mb-3 rounded-2xl border border-white/10 bg-ink2/95 backdrop-blur-md overflow-hidden"
-          >
-            {navLinks.map((link) => (
-              <button
-                key={link.id}
-                onClick={() => scrollTo(link.id)}
-                className={`block w-full text-left px-6 py-4 font-mono text-[13px] border-b border-white/5 last:border-b-0 ${
-                  active === link.id ? 'text-mint' : 'text-paperDim'
-                }`}
-              >
-                {link.label}
-              </button>
-            ))}
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </header>
-  )
+      </aside>
+    </>
+  );
 }

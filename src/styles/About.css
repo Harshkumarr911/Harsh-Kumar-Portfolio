@@ -1,0 +1,355 @@
+/* ==========================================================================
+   ABOUT SECTION — SMOOTH CENTERED STICKY STORY STAGE
+   ========================================================================== */
+.ab-section {
+  --ab-ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+  padding-block: clamp(4.5rem, 8.5vw, 7.5rem);
+  background-color: var(--bg-canvas);
+  color: var(--text-main);
+  border-top: 1px solid var(--border-line);
+  transition: background-color 300ms ease, color 300ms ease;
+}
+
+.ab-container {
+  width: 100%;
+  max-width: 1380px;
+  margin-inline: auto;
+  padding-inline: clamp(1.125rem, 4vw, 3.5rem);
+}
+
+/* ==========================================================================
+   TOP EDITORIAL THESIS HEADER
+   ========================================================================== */
+.ab-intro-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+  gap: 1.75rem clamp(2rem, 5vw, 4.5rem);
+  padding-bottom: clamp(3rem, 6vw, 4.5rem);
+  border-bottom: 1px solid var(--border-line);
+}
+
+.ab-kicker {
+  display: inline-block;
+  margin-bottom: 0.75rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--accent-crimson);
+}
+
+.ab-headline {
+  margin: 0;
+  font-size: clamp(2.15rem, 4.3vw, 3.5rem);
+  font-weight: 700;
+  line-height: 1.04;
+  letter-spacing: -0.03em;
+  color: var(--text-main);
+}
+
+.ab-lead {
+  margin: 0 0 1rem;
+  font-size: clamp(1.05rem, 1.45vw, 1.2rem);
+  font-weight: 500;
+  line-height: 1.6;
+  color: var(--text-main);
+}
+
+.ab-sublead {
+  margin: 0;
+  font-size: 0.96rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+
+.ab-highlight {
+  color: var(--accent-crimson);
+  font-weight: 600;
+}
+
+@media (max-width: 860px) {
+  .ab-intro-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ==========================================================================
+   SPLIT TIMELINE STAGE (CENTERED STICKY LEFT + BREATHABLE RIGHT FEED)
+   ========================================================================== */
+.ab-story-split {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  align-items: stretch;
+  padding-top: clamp(3.5rem, 7vw, 6rem);
+}
+
+.ab-left-track {
+  position: relative;
+  padding-right: clamp(1.5rem, 4vw, 3.5rem);
+}
+
+/* Keeps "My story / 2026" locked dead-center in the viewport while scrolling */
+.ab-sticky-center {
+  position: sticky;
+  top: 50vh;
+  transform: translateY(-50%);
+  padding-block: 1rem;
+}
+
+.ab-story-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-bottom: 0.6rem;
+}
+
+.ab-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent-crimson);
+}
+
+.ab-story-prompt {
+  margin: 0 0 0.65rem;
+  font-size: clamp(1.4rem, 2.4vw, 2.1rem);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  color: var(--text-main);
+}
+
+.ab-year-window {
+  overflow: hidden;
+  margin-bottom: 1.15rem;
+}
+
+.ab-year-display {
+  font-size: clamp(4.25rem, 9.5vw, 8.25rem);
+  font-weight: 700;
+  line-height: 0.92;
+  letter-spacing: -0.045em;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-main);
+  animation: ab-year-glide 420ms var(--ab-ease) both;
+}
+
+@keyframes ab-year-glide {
+  from {
+    opacity: 0.2;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.ab-period-tag {
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--text-muted);
+  margin-bottom: 1rem;
+}
+
+/* Continuous Progress Bar */
+.ab-progress-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  max-width: 270px;
+}
+
+.ab-counter {
+  font-size: 0.82rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.ab-counter strong {
+  color: var(--text-main);
+}
+
+.ab-progress-track {
+  flex: 1;
+  height: 2px;
+  background: var(--border-line);
+  overflow: hidden;
+}
+
+.ab-progress-fill {
+  display: block;
+  height: 100%;
+  background: var(--accent-crimson);
+  transition: width 160ms linear;
+}
+
+/* ==========================================================================
+   RIGHT COLUMN — CONCISE, AIRY MILESTONE FEED
+   ========================================================================== */
+.ab-timeline-feed {
+  position: relative;
+  border-left: 1px solid var(--border-line);
+  padding-left: clamp(1.5rem, 3.8vw, 3.25rem);
+  padding-block: clamp(1rem, 4vh, 3rem);
+  display: flex;
+  flex-direction: column;
+  gap: clamp(3.25rem, 6.5vw, 5.25rem);
+}
+
+.ab-milestone {
+  position: relative;
+  cursor: pointer;
+  opacity: 0.42;
+  transform: translate3d(0, 0, 0);
+  transition:
+    opacity 360ms var(--ab-ease),
+    transform 360ms var(--ab-ease);
+}
+
+.ab-milestone:hover {
+  opacity: 0.85;
+}
+
+.ab-milestone.is-active {
+  opacity: 1;
+  transform: translate3d(6px, 0, 0);
+}
+
+.ab-spine-node {
+  position: absolute;
+  left: calc((clamp(1.5rem, 3.8vw, 3.25rem) + 5px) * -1);
+  top: 0.35rem;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--bg-canvas);
+  border: 2px solid var(--border-hover);
+  transition:
+    background-color 300ms ease,
+    border-color 300ms ease,
+    transform 320ms var(--ab-ease);
+}
+
+.ab-milestone.is-active .ab-spine-node {
+  background: var(--accent-crimson);
+  border-color: var(--accent-crimson);
+  transform: scale(1.35);
+}
+
+.ab-milestone-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.ab-milestone-period {
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--accent-crimson);
+}
+
+.ab-milestone-step {
+  font-size: 0.74rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-muted);
+}
+
+.ab-milestone-role {
+  margin: 0 0 0.25rem;
+  font-size: clamp(1.28rem, 2vw, 1.68rem);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: var(--text-main);
+}
+
+.ab-milestone-org {
+  margin: 0 0 0.75rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.ab-milestone-summary {
+  margin: 0;
+  max-width: 52ch;
+  font-size: 0.96rem;
+  line-height: 1.65;
+  color: var(--text-secondary);
+}
+
+.ab-feed-footer {
+  padding-top: 0.5rem;
+}
+
+.ab-resume-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.65rem 1.1rem;
+  border: 1px solid var(--border-line);
+  border-radius: 6px;
+  background: var(--bg-surface);
+  color: var(--text-main);
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition:
+    border-color 220ms ease,
+    color 220ms ease,
+    transform 220ms var(--ab-ease);
+}
+
+.ab-resume-link:hover {
+  border-color: var(--accent-crimson);
+  color: var(--accent-crimson);
+  transform: translateY(-2px);
+}
+
+/* ==========================================================================
+   RESPONSIVE BREAKPOINTS
+   ========================================================================== */
+@media (max-width: 900px) {
+  .ab-story-split {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+
+  .ab-left-track {
+    padding-right: 0;
+  }
+
+  .ab-sticky-center {
+    position: static;
+    transform: none;
+    padding-block: 0 1.75rem;
+    border-bottom: 1px solid var(--border-line);
+  }
+
+  .ab-milestone {
+    opacity: 1;
+  }
+
+  .ab-milestone.is-active {
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ab-year-display,
+  .ab-milestone,
+  .ab-spine-node,
+  .ab-progress-fill {
+    animation: none !important;
+    transition: none !important;
+  }
+}

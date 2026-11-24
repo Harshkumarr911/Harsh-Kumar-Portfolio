@@ -1,0 +1,408 @@
+/* ==========================================================================
+   ACHIEVEMENTS SECTION — ARCHITECTURAL LEDGER + INLINE PROOF DRAWERS
+   ========================================================================== */
+.ac-section {
+  --ac-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --ac-radius: 8px;
+
+  padding-block: clamp(4.5rem, 8.5vw, 7.5rem);
+  background-color: var(--bg-canvas);
+  color: var(--text-main);
+  border-top: 1px solid var(--border-line);
+  transition: background-color 300ms ease, color 300ms ease;
+}
+
+.ac-container {
+  width: 100%;
+  max-width: 1380px;
+  margin-inline: auto;
+  padding-inline: clamp(1.125rem, 4vw, 3.5rem);
+}
+
+/* ==========================================================================
+   HEADER
+   ========================================================================== */
+.ac-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1.5rem 2.5rem;
+  margin-bottom: clamp(2.75rem, 5.5vw, 4.25rem);
+}
+
+.ac-kicker {
+  display: inline-block;
+  margin-bottom: 0.75rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--accent-crimson);
+}
+
+.ac-title {
+  margin: 0;
+  font-size: clamp(2.35rem, 4.9vw, 4rem);
+  font-weight: 700;
+  line-height: 1.02;
+  letter-spacing: -0.035em;
+  color: var(--text-main);
+}
+
+.ac-subtitle {
+  margin: 0;
+  max-width: 42ch;
+  font-size: clamp(0.95rem, 1.2vw, 1.05rem);
+  line-height: 1.65;
+  color: var(--text-secondary);
+}
+
+/* ==========================================================================
+   ACCORDION LEDGER ROWS
+   ========================================================================== */
+.ac-accordion-list {
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid var(--border-line);
+}
+
+.ac-item {
+  border-bottom: 1px solid var(--border-line);
+  transition: background-color 240ms ease;
+}
+
+.ac-row-trigger {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.25rem;
+  width: 100%;
+  padding-block: clamp(1.25rem, 2.4vw, 1.7rem);
+  padding-inline: 0.5rem;
+  background: transparent;
+  border: none;
+  color: inherit;
+  font-family: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: padding-left 280ms var(--ac-ease);
+}
+
+/* Left Crimson Indicator Bar when Open */
+.ac-row-trigger::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 22%;
+  bottom: 22%;
+  width: 3px;
+  border-radius: 2px;
+  background: var(--accent-crimson);
+  transform: scaleY(0);
+  transition: transform 260ms var(--ac-ease);
+}
+
+.ac-item.is-open .ac-row-trigger {
+  padding-left: 1.1rem;
+}
+
+.ac-item.is-open .ac-row-trigger::before {
+  transform: scaleY(1);
+}
+
+.ac-row-left {
+  display: flex;
+  align-items: center;
+  gap: clamp(0.85rem, 1.8vw, 1.35rem);
+  min-width: 0;
+}
+
+.ac-row-num {
+  font-size: 0.82rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-muted);
+  transition: color 200ms ease;
+}
+
+.ac-item.is-open .ac-row-num {
+  color: var(--accent-crimson);
+}
+
+.ac-row-icon {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border-radius: 6px;
+  border: 1px solid var(--border-line);
+  background: var(--bg-surface);
+  color: var(--text-muted);
+  transition:
+    background-color 220ms ease,
+    border-color 220ms ease,
+    color 220ms ease;
+}
+
+.ac-item.is-open .ac-row-icon,
+.ac-row-trigger:hover .ac-row-icon {
+  background: var(--accent-crimson);
+  border-color: var(--accent-crimson);
+  color: #ffffff;
+}
+
+.ac-row-heading {
+  min-width: 0;
+}
+
+.ac-row-meta-mobile {
+  display: none;
+}
+
+.ac-row-title {
+  margin: 0 0 0.25rem;
+  font-size: clamp(1.12rem, 1.65vw, 1.38rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--text-main);
+}
+
+.ac-row-sub {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+/* Right Metadata + Explicit Action Pill Button */
+.ac-row-right {
+  display: flex;
+  align-items: center;
+  gap: clamp(1rem, 2.5vw, 2.25rem);
+  flex-shrink: 0;
+}
+
+.ac-row-category {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.ac-row-year {
+  font-size: 0.82rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-muted);
+}
+
+.ac-inspect-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.48rem 0.9rem;
+  border: 1px solid var(--border-line);
+  border-radius: 6px;
+  background: var(--bg-surface);
+  color: var(--text-main);
+  font-size: 0.8rem;
+  font-weight: 600;
+  white-space: nowrap;
+  transition:
+    background-color 200ms ease,
+    border-color 200ms ease,
+    color 200ms ease;
+}
+
+.ac-row-trigger:hover .ac-inspect-btn {
+  border-color: var(--border-hover);
+}
+
+.ac-item.is-open .ac-inspect-btn {
+  background: var(--accent-crimson);
+  border-color: var(--accent-crimson);
+  color: #ffffff;
+}
+
+/* ==========================================================================
+   SMOOTH INLINE EXPANDABLE DRAWER (0fr -> 1fr GPU HEIGHT TRANSITION)
+   ========================================================================== */
+.ac-drawer-collapse {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transition:
+    grid-template-rows 420ms var(--ac-ease),
+    opacity 320ms ease;
+}
+
+.ac-item.is-open .ac-drawer-collapse {
+  grid-template-rows: 1fr;
+  opacity: 1;
+}
+
+.ac-drawer-inner {
+  overflow: hidden;
+}
+
+.ac-drawer-card {
+  margin: 0.25rem 0 1.75rem;
+  padding: clamp(1.5rem, 2.8vw, 2.25rem);
+  border: 1px solid var(--border-line);
+  border-radius: var(--ac-radius);
+  background: var(--bg-surface);
+  display: grid;
+  grid-template-columns: minmax(0, 0.72fr) minmax(0, 1.28fr);
+  gap: clamp(1.5rem, 4vw, 3.25rem);
+  align-items: center;
+}
+
+/* Left KPI Column inside Drawer */
+.ac-drawer-kpi-col {
+  padding-right: clamp(1rem, 3vw, 2.5rem);
+  border-right: 1px solid var(--border-line);
+}
+
+.ac-verified-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--accent-crimson);
+  margin-bottom: 1rem;
+}
+
+.ac-kpi-number {
+  font-size: clamp(3rem, 5.5vw, 4.5rem);
+  font-weight: 700;
+  line-height: 0.95;
+  letter-spacing: -0.04em;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-main);
+}
+
+.ac-kpi-caption {
+  margin-top: 0.5rem;
+  font-size: 0.86rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+/* Right Evidence Column inside Drawer */
+.ac-drawer-quote {
+  margin: 0 0 0.75rem;
+  font-size: clamp(0.98rem, 1.25vw, 1.08rem);
+  font-weight: 500;
+  line-height: 1.65;
+  color: var(--text-main);
+}
+
+.ac-drawer-source {
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-bottom: 1.25rem;
+}
+
+.ac-drawer-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin-bottom: 1.35rem;
+}
+
+.ac-drawer-tag {
+  padding: 0.3rem 0.68rem;
+  border: 1px solid var(--border-line);
+  border-radius: 5px;
+  background: var(--bg-canvas);
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.ac-drawer-meter {
+  padding-top: 0.95rem;
+  border-top: 1px solid var(--border-line);
+}
+
+.ac-meter-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  margin-bottom: 0.5rem;
+}
+
+.ac-meter-top strong {
+  color: var(--accent-crimson);
+}
+
+.ac-meter-track {
+  width: 100%;
+  height: 3px;
+  background: var(--border-line);
+  overflow: hidden;
+}
+
+.ac-meter-fill {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--accent-crimson);
+}
+
+/* ==========================================================================
+   RESPONSIVE BREAKPOINTS
+   ========================================================================== */
+@media (max-width: 900px) {
+  .ac-row-category,
+  .ac-row-year {
+    display: none;
+  }
+
+  .ac-row-meta-mobile {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-size: 0.74rem;
+    font-weight: 700;
+    color: var(--accent-crimson);
+    margin-bottom: 0.25rem;
+  }
+
+  .ac-drawer-card {
+    grid-template-columns: 1fr;
+    gap: 1.35rem;
+  }
+
+  .ac-drawer-kpi-col {
+    padding-right: 0;
+    padding-bottom: 1.25rem;
+    border-right: none;
+    border-bottom: 1px solid var(--border-line);
+  }
+}
+
+@media (max-width: 540px) {
+  .ac-row-trigger {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .ac-row-right {
+    width: 100%;
+    justify-content: flex-end;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ac-drawer-collapse,
+  .ac-row-trigger,
+  .ac-row-trigger::before {
+    transition: none !important;
+  }
+}

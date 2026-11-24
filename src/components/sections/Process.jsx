@@ -1,113 +1,346 @@
-import React, { useRef } from 'react'
-import { motion, useInView, useScroll, useTransform } from 'framer-motion'
-import { processSteps } from '../../data/content.js'
-import SectionHeading from '../layout/SectionHeading.jsx'
+import React, { useEffect, useRef, useState } from "react";
+import {
+  MagnifyingGlass,
+  GitBranch,
+  CodeBlock,
+  RocketLaunch,
+  ArrowsClockwise,
+  CheckCircle,
+} from "@phosphor-icons/react";
+import "../../styles/Process.css";
 
-const cardLayout = [
-  { top: '2%', left: '4%', rotate: -4 },
-  { top: '14%', left: '54%', rotate: 3 },
-  { top: '46%', left: '18%', rotate: -2 },
-  { top: '62%', left: '58%', rotate: 4 },
-]
-
-function ProcessCard({ step, index }) {
-  const ref = useRef(null)
-  const isActive = useInView(ref, { margin: '-40% 0px -40% 0px' })
-  const layout = cardLayout[index]
-
-  return (
-    <motion.div
-      ref={ref}
-      style={{ top: layout.top, left: layout.left }}
-      animate={{ rotate: isActive ? 0 : layout.rotate, scale: isActive ? 1.04 : 1 }}
-      transition={{ duration: 0.5, ease: 'easeOut' }}
-      className={`absolute w-[280px] rounded-2xl border p-6 transition-colors duration-500 ${
-        isActive
-          ? 'bg-mint text-ink border-mint shadow-[0_0_50px_rgba(127,231,196,0.35)]'
-          : 'bg-panel text-paper border-line'
-      }`}
-    >
-      <div className={`font-mono text-[12px] mb-2 ${isActive ? 'text-ink/60' : 'text-slate'}`}>
-        {step.num}
-      </div>
-      <h3 className="font-serif text-[21px] font-semibold mb-2">{step.title}</h3>
-      <p className={`text-[13.5px] leading-[1.6] ${isActive ? 'text-ink/80' : 'text-paperDim'}`}>
-        {step.text}
-      </p>
-    </motion.div>
-  )
-}
-
-function ProcessCardMobile({ step }) {
-  return (
-    <div className="rounded-2xl border border-line bg-panel p-6">
-      <div className="font-mono text-[12px] text-slate mb-2">{step.num}</div>
-      <h3 className="font-serif text-[20px] font-semibold mb-2">{step.title}</h3>
-      <p className="text-[13.5px] leading-[1.6] text-paperDim">{step.text}</p>
-    </div>
-  )
-}
+const PROCESS_STEPS = [
+  {
+    number: "01",
+    phase: "Discover",
+    tag: "Constraints First",
+    icon: MagnifyingGlass,
+    frontSummary:
+      "Map traffic patterns, latency budgets, and failure modes before writing a single line of code.",
+    backTitle: "System Spec & Bottleneck Map",
+    backDetails: [
+      "Define < 50ms p95 API latency budgets and read/write ratios upfront.",
+      "Identify concurrency hotspots and team ownership boundaries early.",
+    ],
+    metric: "Zero guesswork before architecture",
+  },
+  {
+    number: "02",
+    phase: "Architect",
+    tag: "Blueprint & Data",
+    icon: GitBranch,
+    frontSummary:
+      "Design layered Controller → Service → Repository boundaries with purposeful caching and indexing.",
+    backTitle: "Schema, Indexing & Cache Layer",
+    backDetails: [
+      "Redis TTL caching for hot reads + MongoDB 2dsphere / MySQL B-tree indexes.",
+      "Stateless JWT authentication with strict Role-Based Access Control (RBAC).",
+    ],
+    metric: "Controller → Service → Repository",
+  },
+  {
+    number: "03",
+    phase: "Build",
+    tag: "Incremental Shipping",
+    icon: CodeBlock,
+    frontSummary:
+      "Ship Spring Boot services and React interfaces in small, reviewable commits backed by automated tests.",
+    backTitle: "Typed Contracts & Verification",
+    backDetails: [
+      "Clean DTO validation, global exception handling, and JUnit service coverage.",
+      "End-to-end Postman & Playwright contract verification across flows.",
+    ],
+    metric: "Clean, reviewable vertical slices",
+  },
+  {
+    number: "04",
+    phase: "Prove & Deploy",
+    tag: "Load & Production",
+    icon: RocketLaunch,
+    frontSummary:
+      "Deploy live on Render & Vercel, stress-test concurrency with k6 and JMeter, then monitor telemetry.",
+    backTitle: "k6 Load Benchmark & Telemetry",
+    backDetails: [
+      "100,000+ simulated requests executed under high-concurrency virtual users.",
+      "Verified 4,021 RPS peak throughput with 0% failed requests.",
+    ],
+    metric: "4,021 RPS · 0% request failures",
+  },
+];
 
 export default function Process() {
-  const containerRef = useRef(null)
-  const { scrollYProgress } = useScroll({ target: containerRef, offset: ['start 80%', 'end 40%'] })
-  const pathLength = useTransform(scrollYProgress, [0, 1], [0, 1])
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [isDesktopFlipped, setIsDesktopFlipped] = useState(false);
+  const [mobileFocusedIndex, setMobileFocusedIndex] = useState(0);
+  const mobileCardRefs = useRef([]);
+
+  // Mobile: automatically flip the card currently centered in the phone viewport
+  useEffect(() => {
+    const cards = mobileCardRefs.current.filter(Boolean);
+    if (!cards.length) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const focused = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+
+        if (focused[0]) {
+          const idx = Number(focused[0].target.getAttribute("data-idx"));
+          if (!Number.isNaN(idx)) {
+            setMobileFocusedIndex(idx);
+          }
+        }
+      },
+      {
+        rootMargin: "-28% 0px -28% 0px",
+        threshold: [0.35, 0.65, 0.9],
+      }
+    );
+
+    cards.forEach((el) => observer.observe(el));
+    return () => observer.disconnect();
+  }, []);
+
+  const current = PROCESS_STEPS[activeIndex] || PROCESS_STEPS[0];
+  const CurrentIcon = current.icon;
 
   return (
-    <section id="process" className="bg-ink py-[120px]">
-      <SectionHeading word="PROCESS" crumb="My Process" title="How I Work" />
-      <div className="wrap">
-        <div className="max-w-[640px] mb-16">
-          <div className="eyebrow mb-4">PROCESS</div>
-          <h2
-            className="font-serif font-medium leading-[1.05]"
-            style={{ fontSize: 'clamp(32px,4.6vw,54px)' }}
-          >
-            Here's how I turn ideas into systems that ship.
-          </h2>
-          <p className="text-slate text-[14.5px] leading-[1.6] mt-5">
-            A structured, load-tested approach for turning a spec into a full-stack application
-            that still behaves correctly when real traffic hits it.
+    <section className="pr-section" id="process">
+      <div className="pr-container">
+        {/* Clean Editorial Header */}
+        <div className="pr-header">
+          <div>
+            <span className="pr-kicker">02 / Engineering Workflow</span>
+            <h2 className="pr-title">
+              How I turn ideas into
+              <br />
+              systems that ship.
+            </h2>
+          </div>
+
+          <p className="pr-subtitle">
+            Four disciplined stages from problem constraints to load-tested
+            production. <strong>Shipped, not just demoed.</strong>
           </p>
         </div>
 
-        {/* Desktop: staggered cards with an animated connector path */}
-        <div ref={containerRef} className="relative hidden md:block" style={{ height: 620 }}>
-          <svg className="absolute inset-0 w-full h-full" viewBox="0 0 1000 620" preserveAspectRatio="none">
-            <motion.path
-              d="M170,110 C 380,20 470,180 660,210 C 520,270 360,300 340,380 C 520,430 620,450 780,520"
-              stroke="#7fe7c4"
-              strokeWidth="2"
-              strokeDasharray="7 9"
-              fill="none"
-              style={{ pathLength, opacity: 0.7 }}
-            />
-          </svg>
+        {/* ================================================================
+            DESKTOP VIEW: LEFT CLEAN STEP INDEX + RIGHT 3D TACTILE FLIP STAGE
+           ================================================================ */}
+        <div className="pr-desktop-stage">
+          {/* Left Navigation List */}
+          <div className="pr-step-list" role="tablist" aria-label="Workflow steps">
+            {PROCESS_STEPS.map((step, index) => {
+              const isSelected = index === activeIndex;
 
-          {processSteps.map((step, i) => (
-            <ProcessCard key={step.num} step={step} index={i} />
-          ))}
+              return (
+                <button
+                  key={step.number}
+                  type="button"
+                  role="tab"
+                  aria-selected={isSelected}
+                  className={`pr-nav-row ${isSelected ? "is-selected" : ""}`}
+                  onClick={() => {
+                    setActiveIndex(index);
+                    setIsDesktopFlipped(false);
+                  }}
+                  onMouseEnter={() => {
+                    if (activeIndex !== index) {
+                      setActiveIndex(index);
+                      setIsDesktopFlipped(false);
+                    }
+                  }}
+                >
+                  <span className="pr-nav-num">{step.number}</span>
+                  <span className="pr-nav-phase">{step.phase}</span>
+                  <span className="pr-nav-tag">{step.tag}</span>
+                </button>
+              );
+            })}
+          </div>
 
-          <motion.div
-            initial={{ opacity: 0, rotate: -6, y: 10 }}
-            whileInView={{ opacity: 1, rotate: -6, y: 0 }}
-            viewport={{ once: true, amount: 0.8 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="absolute font-hand text-mint text-[26px]"
-            style={{ top: '58%', left: '4%' }}
+          {/* Right Focal 3D Flip Card */}
+          <div
+            key={current.number}
+            className={`pr-flip-scene pr-stage-enter ${
+              isDesktopFlipped ? "is-flipped" : ""
+            }`}
+            onMouseEnter={() => setIsDesktopFlipped(true)}
+            onMouseLeave={() => setIsDesktopFlipped(false)}
+            onClick={() => setIsDesktopFlipped((prev) => !prev)}
+            role="button"
+            tabIndex={0}
+            aria-label={`${current.phase} stage card. Hover or press Enter to flip for proof.`}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                setIsDesktopFlipped((prev) => !prev);
+              }
+            }}
           >
-            Shipped, not just demoed.
-          </motion.div>
+            <div className="pr-flip-card">
+              {/* FRONT FACE */}
+              <div className="pr-face pr-face-front">
+                <span className="pr-card-sheen" aria-hidden="true" />
+
+                <div className="pr-face-top">
+                  <span className="pr-face-step">
+                    Stage {current.number} · {current.tag}
+                  </span>
+                  <span className="pr-face-icon" aria-hidden="true">
+                    <CurrentIcon size={22} weight="regular" />
+                  </span>
+                </div>
+
+                <div className="pr-face-body">
+                  <h3 className="pr-face-title">{current.phase}</h3>
+                  <p className="pr-face-desc">{current.frontSummary}</p>
+                </div>
+
+                <div className="pr-face-bottom">
+                  <span className="pr-flip-hint">
+                    <ArrowsClockwise
+                      size={15}
+                      weight="bold"
+                      className="pr-spin-icon"
+                      aria-hidden="true"
+                    />
+                    <span>Hover card to flip for engineering proof</span>
+                  </span>
+                </div>
+              </div>
+
+              {/* BACK FACE */}
+              <div className="pr-face pr-face-back">
+                <span className="pr-card-sheen" aria-hidden="true" />
+
+                <div className="pr-face-top">
+                  <span className="pr-back-kicker">
+                    <CheckCircle size={16} weight="fill" aria-hidden="true" />
+                    <span>Verified Deliverable · {current.number}</span>
+                  </span>
+                  <span className="pr-back-pill">{current.phase}</span>
+                </div>
+
+                <div className="pr-face-body">
+                  <h3 className="pr-back-title pr-stagger-1">
+                    {current.backTitle}
+                  </h3>
+                  <ul className="pr-back-list">
+                    {current.backDetails.map((point, i) => (
+                      <li
+                        key={point}
+                        className={`pr-stagger-${i + 2}`}
+                      >
+                        {point}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div className="pr-face-bottom">
+                  <span className="pr-back-metric pr-stagger-4">
+                    {current.metric}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
-        {/* Mobile: simple vertical stack */}
-        <div className="grid grid-cols-1 gap-5 md:hidden">
-          {processSteps.map((step) => (
-            <ProcessCardMobile key={step.num} step={step} />
-          ))}
-          <div className="font-hand text-mint text-[24px] pl-1">Shipped, not just demoed.</div>
+        {/* ================================================================
+            MOBILE & TABLET VIEW: SCROLL-FOCUS AUTO-FLIPPING CARDS
+           ================================================================ */}
+        <div className="pr-mobile-feed">
+          {PROCESS_STEPS.map((step, index) => {
+            const StepIcon = step.icon;
+            const isFlipped = mobileFocusedIndex === index;
+
+            return (
+              <div
+                key={step.number}
+                ref={(el) => (mobileCardRefs.current[index] = el)}
+                data-idx={index}
+                className={`pr-flip-scene pr-mobile-scene ${
+                  isFlipped ? "is-flipped" : ""
+                }`}
+                onClick={() =>
+                  setMobileFocusedIndex(isFlipped ? -1 : index)
+                }
+              >
+                <div className="pr-flip-card">
+                  {/* Front */}
+                  <div className="pr-face pr-face-front">
+                    <span className="pr-card-sheen" aria-hidden="true" />
+
+                    <div className="pr-face-top">
+                      <span className="pr-face-step">
+                        {step.number} · {step.tag}
+                      </span>
+                      <span className="pr-face-icon" aria-hidden="true">
+                        <StepIcon size={20} weight="regular" />
+                      </span>
+                    </div>
+
+                    <div className="pr-face-body">
+                      <h3 className="pr-face-title">{step.phase}</h3>
+                      <p className="pr-face-desc">{step.frontSummary}</p>
+                    </div>
+
+                    <div className="pr-face-bottom">
+                      <span className="pr-flip-hint">
+                        <ArrowsClockwise
+                          size={14}
+                          weight="bold"
+                          className="pr-spin-icon"
+                          aria-hidden="true"
+                        />
+                        <span>Scroll focus or tap to flip</span>
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Back */}
+                  <div className="pr-face pr-face-back">
+                    <span className="pr-card-sheen" aria-hidden="true" />
+
+                    <div className="pr-face-top">
+                      <span className="pr-back-kicker">
+                        <CheckCircle size={15} weight="fill" aria-hidden="true" />
+                        <span>{step.phase} Proof</span>
+                      </span>
+                      <span className="pr-face-step">{step.number}</span>
+                    </div>
+
+                    <div className="pr-face-body">
+                      <h3 className="pr-back-title pr-stagger-1">
+                        {step.backTitle}
+                      </h3>
+                      <ul className="pr-back-list">
+                        {step.backDetails.map((point, i) => (
+                          <li
+                            key={point}
+                            className={`pr-stagger-${i + 2}`}
+                          >
+                            {point}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+
+                    <div className="pr-face-bottom">
+                      <span className="pr-back-metric pr-stagger-4">
+                        {step.metric}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
         </div>
       </div>
     </section>
-  )
+  );
 }

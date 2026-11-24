@@ -1,0 +1,458 @@
+/* ==========================================================================
+   PROCESS SECTION — TACTILE 3D FLIP STAGE WITH SUBTLE MOTION CRAFT
+   ========================================================================== */
+.pr-section {
+  --pr-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --pr-flip-ease: cubic-bezier(0.25, 0.9, 0.3, 1.04);
+  --pr-radius: 8px;
+
+  padding-block: clamp(4.5rem, 8.5vw, 7.5rem);
+  background-color: var(--bg-canvas);
+  color: var(--text-main);
+  border-top: 1px solid var(--border-line);
+  transition: background-color 300ms ease, color 300ms ease;
+}
+
+.pr-container {
+  width: 100%;
+  max-width: 1380px;
+  margin-inline: auto;
+  padding-inline: clamp(1.125rem, 4vw, 3.5rem);
+}
+
+/* ==========================================================================
+   HEADER
+   ========================================================================== */
+.pr-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1.5rem 2.5rem;
+  margin-bottom: clamp(3rem, 6vw, 4.75rem);
+}
+
+.pr-kicker {
+  display: inline-block;
+  margin-bottom: 0.75rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--accent-crimson);
+}
+
+.pr-title {
+  margin: 0;
+  font-size: clamp(2.35rem, 4.9vw, 4rem);
+  font-weight: 700;
+  line-height: 1.02;
+  letter-spacing: -0.035em;
+  color: var(--text-main);
+}
+
+.pr-subtitle {
+  margin: 0;
+  max-width: 40ch;
+  font-size: clamp(0.95rem, 1.2vw, 1.05rem);
+  line-height: 1.65;
+  color: var(--text-secondary);
+}
+
+.pr-subtitle strong {
+  color: var(--accent-crimson);
+  font-weight: 700;
+}
+
+/* ==========================================================================
+   DESKTOP STAGE: LEFT TYPOGRAPHIC LIST + RIGHT SINGLE FOCAL 3D FLIP CARD
+   ========================================================================== */
+.pr-desktop-stage {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  align-items: center;
+  gap: clamp(2rem, 5vw, 4.5rem);
+}
+
+.pr-step-list {
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid var(--border-line);
+}
+
+.pr-nav-row {
+  position: relative;
+  display: flex;
+  align-items: baseline;
+  gap: 1.25rem;
+  width: 100%;
+  padding-block: 1.35rem;
+  padding-inline: 0.4rem;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--border-line);
+  color: var(--text-muted);
+  font-family: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    color 240ms ease,
+    padding-left 300ms var(--pr-ease);
+}
+
+.pr-nav-row::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 24%;
+  bottom: 24%;
+  width: 3px;
+  border-radius: 2px;
+  background: var(--accent-crimson);
+  transform: scaleY(0);
+  transition: transform 280ms var(--pr-ease);
+}
+
+.pr-nav-row:hover,
+.pr-nav-row.is-selected {
+  color: var(--text-main);
+  padding-left: 1rem;
+}
+
+.pr-nav-row.is-selected::before {
+  transform: scaleY(1);
+}
+
+.pr-nav-num {
+  font-size: 0.85rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.pr-nav-row.is-selected .pr-nav-num {
+  color: var(--accent-crimson);
+}
+
+.pr-nav-phase {
+  font-size: clamp(1.35rem, 2vw, 1.75rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.pr-nav-tag {
+  margin-left: auto;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+/* ==========================================================================
+   3D TACTILE FLIP MECHANICS + SPECULAR SHEEN + BACK-FACE STAGGER
+   ========================================================================== */
+.pr-flip-scene {
+  perspective: 1600px;
+  width: 100%;
+  height: 365px;
+  cursor: pointer;
+  outline: none;
+}
+
+/* Soft deck-settle animation when switching between 01 -> 04 on the left */
+.pr-stage-enter {
+  animation: pr-deck-settle 340ms var(--pr-ease) both;
+}
+
+@keyframes pr-deck-settle {
+  from {
+    opacity: 0.45;
+    transform: translateY(8px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.pr-flip-card {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 740ms var(--pr-flip-ease);
+}
+
+/* Tactile physical lift during 3D rotation */
+.pr-flip-scene.is-flipped .pr-flip-card {
+  transform: translateY(-5px) scale(1.015) rotateY(180deg);
+}
+
+.pr-face {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border-radius: var(--pr-radius);
+  padding: clamp(1.75rem, 3vw, 2.5rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border: 1px solid var(--border-line);
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.14);
+  transition: border-color 300ms ease, box-shadow 360ms ease;
+}
+
+.pr-flip-scene:hover .pr-face {
+  border-color: var(--border-hover);
+}
+
+/* Diagonal Glass / Paper Specular Sheen sweeping across card on flip */
+.pr-card-sheen {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    115deg,
+    transparent 20%,
+    rgba(255, 255, 255, 0.06) 48%,
+    transparent 76%
+  );
+  transform: translateX(-110%);
+  transition: transform 760ms var(--pr-ease);
+  pointer-events: none;
+}
+
+[data-theme="light"] .pr-face-front .pr-card-sheen {
+  background: linear-gradient(
+    115deg,
+    transparent 20%,
+    rgba(255, 255, 255, 0.55) 48%,
+    transparent 76%
+  );
+}
+
+.pr-flip-scene.is-flipped .pr-card-sheen {
+  transform: translateX(110%);
+}
+
+/* Front Face */
+.pr-face-front {
+  background: var(--bg-surface);
+  color: var(--text-main);
+}
+
+/* Back Face */
+.pr-face-back {
+  transform: rotateY(180deg);
+  background: #14161b;
+  color: #f3f2ee;
+  border-color: var(--accent-crimson);
+  box-shadow: 0 20px 44px rgba(0, 0, 0, 0.28);
+}
+
+[data-theme="light"] .pr-face-back {
+  background: #16181d;
+  color: #f6f5f1;
+}
+
+.pr-face-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.pr-face-step {
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--accent-crimson);
+}
+
+.pr-face-icon {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 6px;
+  background: var(--bg-canvas);
+  border: 1px solid var(--border-line);
+  color: var(--text-main);
+  transition: transform 320ms var(--pr-ease), color 240ms ease;
+}
+
+.pr-flip-scene:hover .pr-face-icon {
+  color: var(--accent-crimson);
+  transform: scale(1.06);
+}
+
+.pr-face-body {
+  margin-block: auto;
+}
+
+.pr-face-title {
+  margin: 0 0 0.85rem;
+  font-size: clamp(2rem, 3.2vw, 2.75rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+  color: var(--text-main);
+}
+
+.pr-face-desc {
+  margin: 0;
+  max-width: 44ch;
+  font-size: clamp(1rem, 1.3vw, 1.12rem);
+  line-height: 1.65;
+  color: var(--text-secondary);
+}
+
+.pr-face-bottom {
+  padding-top: 1.1rem;
+  border-top: 1px solid var(--border-line);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.pr-flip-hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.pr-spin-icon {
+  color: var(--accent-crimson);
+  transition: transform 520ms var(--pr-ease);
+}
+
+.pr-flip-scene:hover .pr-spin-icon {
+  transform: rotate(180deg);
+}
+
+/* Back Face Typography + Subtle Staggered Entrance on Flip */
+.pr-back-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #ff6b63;
+}
+
+.pr-back-pill {
+  padding: 0.25rem 0.65rem;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.08);
+  font-size: 0.74rem;
+  font-weight: 600;
+  color: #f3f2ee;
+}
+
+.pr-back-title {
+  margin: 0 0 1rem;
+  font-size: clamp(1.45rem, 2.2vw, 1.9rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #ffffff;
+}
+
+.pr-back-list {
+  margin: 0;
+  padding-left: 1.15rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.pr-back-list li {
+  font-size: 0.96rem;
+  line-height: 1.6;
+  color: #d0d2d8 !important;
+}
+
+.pr-face-back .pr-face-bottom {
+  border-top-color: rgba(255, 255, 255, 0.12);
+}
+
+.pr-back-metric {
+  font-size: 0.86rem;
+  font-weight: 700;
+  color: #ff6b63;
+}
+
+/* Micro-stagger reveal on back-face items when flipped */
+.pr-stagger-1,
+.pr-stagger-2,
+.pr-stagger-3,
+.pr-stagger-4 {
+  opacity: 0;
+  transform: translateY(8px);
+  transition:
+    opacity 320ms ease,
+    transform 360ms var(--pr-ease);
+}
+
+.pr-flip-scene.is-flipped .pr-stagger-1 {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 160ms;
+}
+
+.pr-flip-scene.is-flipped .pr-stagger-2 {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 220ms;
+}
+
+.pr-flip-scene.is-flipped .pr-stagger-3 {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 280ms;
+}
+
+.pr-flip-scene.is-flipped .pr-stagger-4 {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 340ms;
+}
+
+/* ==========================================================================
+   MOBILE & TABLET RESPONSIVE FEED (SCROLL-FOCUS FLIP)
+   ========================================================================== */
+.pr-mobile-feed {
+  display: none;
+}
+
+@media (max-width: 900px) {
+  .pr-desktop-stage {
+    display: none;
+  }
+
+  .pr-mobile-feed {
+    display: flex;
+    flex-direction: column;
+    gap: 1.75rem;
+  }
+
+  .pr-mobile-scene {
+    height: 325px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pr-flip-card,
+  .pr-card-sheen,
+  .pr-stage-enter,
+  .pr-nav-row,
+  .pr-nav-row::before,
+  .pr-stagger-1,
+  .pr-stagger-2,
+  .pr-stagger-3,
+  .pr-stagger-4 {
+    animation: none !important;
+    transition: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}

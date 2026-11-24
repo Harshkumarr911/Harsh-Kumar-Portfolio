@@ -1,0 +1,252 @@
+/* ==========================================================================
+   SKILLS SECTION — OPEN ARCHITECTURAL INDEX (MATCHING FEATURED PROJECTS)
+   ========================================================================== */
+.sk-section {
+  --sk-ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+  padding-block: clamp(4.5rem, 8.5vw, 7.5rem);
+  background-color: var(--bg-canvas);
+  color: var(--text-main);
+  border-top: 1px solid var(--border-line);
+  transition: background-color 300ms ease, color 300ms ease;
+}
+
+.sk-container {
+  width: 100%;
+  max-width: 1380px;
+  margin-inline: auto;
+  padding-inline: clamp(1.125rem, 4vw, 3.5rem);
+}
+
+/* ==========================================================================
+   HEADER (EXACT SCALE & RHYTHM AS FEATURED PROJECTS)
+   ========================================================================== */
+.sk-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1.5rem 2.5rem;
+  margin-bottom: clamp(3rem, 6vw, 4.75rem);
+}
+
+.sk-kicker {
+  display: inline-block;
+  margin-bottom: 0.75rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--accent-crimson);
+}
+
+.sk-title {
+  margin: 0;
+  font-size: clamp(2.5rem, 5.2vw, 4.25rem);
+  font-weight: 700;
+  line-height: 0.98;
+  letter-spacing: -0.035em;
+  color: var(--text-main);
+}
+
+.sk-subtitle {
+  margin: 0;
+  max-width: 42ch;
+  font-size: clamp(0.95rem, 1.25vw, 1.05rem);
+  line-height: 1.65;
+  color: var(--text-secondary);
+}
+
+/* ==========================================================================
+   ARCHITECTURAL INDEX ROWS (ZERO BOX CLUTTER)
+   ========================================================================== */
+.sk-index-list {
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid var(--border-line);
+}
+
+.sk-row {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.25fr);
+  align-items: baseline;
+  gap: 1.25rem 3rem;
+  padding-block: clamp(1.5rem, 2.8vw, 2.15rem);
+  padding-inline: 0.5rem;
+  border-bottom: 1px solid var(--border-line);
+  transition:
+    background-color 240ms ease,
+    padding-left 300ms var(--sk-ease);
+}
+
+/* Subtle left crimson indicator bar on hover */
+.sk-row::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 22%;
+  bottom: 22%;
+  width: 3px;
+  border-radius: 2px;
+  background-color: var(--accent-crimson);
+  transform: scaleY(0);
+  transform-origin: center;
+  transition: transform 280ms var(--sk-ease);
+}
+
+.sk-row:hover {
+  padding-left: 1.15rem;
+}
+
+.sk-row:hover::before {
+  transform: scaleY(1);
+}
+
+.sk-row-left {
+  display: flex;
+  align-items: baseline;
+  gap: clamp(1rem, 2vw, 1.75rem);
+}
+
+.sk-row-num {
+  font-size: 0.82rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-muted);
+  transition: color 220ms ease;
+}
+
+.sk-row:hover .sk-row-num {
+  color: var(--accent-crimson);
+}
+
+.sk-row-title {
+  margin: 0;
+  font-size: clamp(1.22rem, 1.8vw, 1.55rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--text-main);
+}
+
+.sk-row-note {
+  margin: 0.4rem 0 0;
+  font-size: 0.9rem;
+  line-height: 1.55;
+  color: var(--text-muted);
+  max-width: 40ch;
+}
+
+/* Right Side: Clean Inline Typographic Stack */
+.sk-row-right {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.45rem 0.65rem;
+  line-height: 1.65;
+}
+
+.sk-skill-item {
+  font-size: clamp(0.95rem, 1.25vw, 1.08rem);
+  font-weight: 500;
+  color: var(--text-secondary);
+  transition: color 180ms ease;
+}
+
+.sk-row:hover .sk-skill-item {
+  color: var(--text-main);
+}
+
+.sk-skill-item:hover {
+  color: var(--accent-crimson) !important;
+}
+
+.sk-skill-sep {
+  font-size: 0.85rem;
+  color: var(--border-hover);
+  user-select: none;
+}
+
+@media (max-width: 900px) {
+  .sk-row {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .sk-row-right {
+    padding-left: calc(0.82rem + clamp(1rem, 2vw, 1.75rem));
+  }
+}
+
+@media (max-width: 540px) {
+  .sk-row-right {
+    padding-left: 0;
+  }
+}
+
+/* ==========================================================================
+   BEYOND THE STACK — OPEN 4-COLUMN ARCHITECTURAL STRIP
+   ========================================================================== */
+.sk-beyond {
+  margin-top: clamp(3.5rem, 7vw, 5.5rem);
+}
+
+.sk-beyond-top {
+  margin-bottom: 1.75rem;
+}
+
+.sk-beyond-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(1.5rem, 3vw, 2.5rem);
+  padding-top: 1.75rem;
+  border-top: 1px solid var(--border-line);
+}
+
+@media (max-width: 1024px) {
+  .sk-beyond-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 2rem;
+  }
+}
+
+@media (max-width: 540px) {
+  .sk-beyond-grid {
+    grid-template-columns: 1fr;
+    gap: 1.75rem;
+  }
+}
+
+.sk-beyond-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.sk-beyond-num {
+  font-size: 0.78rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--accent-crimson);
+  margin-bottom: 0.65rem;
+}
+
+.sk-beyond-title {
+  margin: 0 0 0.55rem;
+  font-size: 1.12rem;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  color: var(--text-main);
+}
+
+.sk-beyond-detail {
+  margin: 0;
+  font-size: 0.92rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sk-row,
+  .sk-row::before,
+  .sk-skill-item {
+    transition: none !important;
+  }
+}

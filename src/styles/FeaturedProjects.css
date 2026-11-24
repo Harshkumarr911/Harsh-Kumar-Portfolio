@@ -1,0 +1,467 @@
+/* ==========================================================================
+   FEATURED PROJECTS — TACTILE FOLDER SHOWCASE
+   ========================================================================== */
+.fp-section {
+  --fp-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --fp-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  padding-block: clamp(4rem, 8vw, 7rem);
+  background-color: var(--bg-canvas);
+  color: var(--text-main);
+  border-top: 1px solid var(--border-line);
+  transition: background-color 300ms ease, color 300ms ease;
+}
+
+.fp-container {
+  width: 100%;
+  max-width: 1380px;
+  margin-inline: auto;
+  padding-inline: clamp(1.125rem, 4vw, 3.5rem);
+}
+
+/* ==========================================================================
+   HEADER ROW
+   ========================================================================== */
+.fp-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1.5rem 2.5rem;
+  margin-bottom: clamp(2.75rem, 5.5vw, 4.25rem);
+}
+
+.fp-title {
+  margin: 0;
+  font-size: clamp(2.5rem, 5.2vw, 4.25rem);
+  font-weight: 700;
+  line-height: 0.98;
+  letter-spacing: -0.035em;
+  color: var(--text-main);
+}
+
+.fp-subtitle {
+  margin: 1.15rem 0 0;
+  max-width: 44ch;
+  font-size: clamp(0.95rem, 1.25vw, 1.05rem);
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+
+.fp-github-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.55rem 0.95rem;
+  border: 1px solid var(--border-line);
+  border-radius: 6px;
+  background: var(--bg-surface);
+  color: var(--text-main);
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition:
+    border-color 220ms ease,
+    background-color 220ms ease,
+    color 220ms ease,
+    transform 220ms var(--fp-ease);
+}
+
+.fp-github-link:hover {
+  border-color: var(--accent-crimson);
+  color: var(--accent-crimson);
+  transform: translateY(-2px);
+}
+
+/* ==========================================================================
+   FOLDER GRID (4 COLS DESKTOP -> 2 COLS TABLET -> 1 COL MOBILE)
+   ========================================================================== */
+.fp-folder-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(1.5rem, 2.5vw, 2rem);
+}
+
+@media (max-width: 1120px) {
+  .fp-folder-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 2.5rem 1.5rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .fp-folder-grid {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+}
+
+.fp-folder-link {
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  color: inherit;
+  outline: none;
+}
+
+/* ==========================================================================
+   3D FOLDER STAGE & LAYERED SHEETS
+   ========================================================================== */
+.fp-folder-stage {
+  position: relative;
+  width: 100%;
+  height: 245px;
+  padding-top: 32px;
+  perspective: 950px;
+  cursor: pointer;
+  overflow: visible;
+}
+
+/* Back Folder Body + Top-Left Tab (Semi-Transparent Gradient) */
+/* Back Folder Body + Top-Left Tab (Balanced Frosted Neutral Gradient) */
+.fp-folder-back {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 0 10px 10px 10px;
+  background: linear-gradient(
+    160deg,
+    rgba(34, 38, 46, 0.86) 0%,
+    rgba(20, 22, 26, 0.92) 100%
+  );
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  transition: border-color 280ms ease, background 280ms ease;
+}
+
+.fp-folder-tab {
+  position: absolute;
+  top: -15px;
+  left: -1px;
+  width: 38%;
+  height: 16px;
+  background: linear-gradient(
+    160deg,
+    rgba(38, 42, 50, 0.9) 0%,
+    rgba(24, 26, 31, 0.94) 100%
+  );
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-bottom: none;
+  border-radius: 8px 10px 0 0;
+  transition: border-color 280ms ease, background 280ms ease;
+}
+
+[data-theme="light"] .fp-folder-back {
+  background: linear-gradient(
+    160deg,
+    rgba(232, 228, 220, 0.88) 0%,
+    rgba(218, 213, 203, 0.94) 100%
+  );
+  border-color: rgba(17, 19, 23, 0.16);
+}
+
+[data-theme="light"] .fp-folder-tab {
+  background: linear-gradient(
+    160deg,
+    rgba(235, 231, 223, 0.9) 0%,
+    rgba(222, 217, 207, 0.95) 100%
+  );
+  border-color: rgba(17, 19, 23, 0.16);
+}
+
+/* Front Outer Box — Subtle Frosted Gradient (Comfortable Neutral + Hint of Accent) */
+.fp-folder-front {
+  position: absolute;
+  z-index: 3;
+  inset: 64px 0 0 0;
+  padding: 14px 16px 16px;
+  border-radius: 10px;
+  background: linear-gradient(
+    145deg,
+    rgba(36, 40, 48, 0.84) 0%,
+    rgba(24, 27, 33, 0.88) 65%,
+    rgba(224, 62, 54, 0.08) 100%
+  );
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.35);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transform-origin: bottom center;
+  transition:
+    transform 460ms var(--fp-ease),
+    border-color 280ms ease,
+    box-shadow 320ms ease,
+    background 280ms ease;
+}
+
+[data-theme="light"] .fp-folder-front {
+  background: linear-gradient(
+    145deg,
+    rgba(252, 251, 248, 0.86) 0%,
+    rgba(239, 236, 229, 0.9) 68%,
+    rgba(224, 62, 54, 0.06) 100%
+  );
+  border-color: rgba(17, 19, 23, 0.16);
+  box-shadow: 0 -6px 20px rgba(17, 19, 23, 0.09);
+}
+/* Inner Fanned Preview Sheets */
+.fp-sheet {
+  position: absolute;
+  left: 8%;
+  right: 8%;
+  bottom: 22px;
+  height: 162px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(29, 32, 38, 0.94);
+  box-shadow: 0 -6px 20px rgba(0, 0, 0, 0.32);
+  transform-origin: bottom center;
+  transition:
+    transform 520ms var(--fp-spring),
+    box-shadow 320ms ease,
+    border-color 280ms ease;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+[data-theme="light"] .fp-sheet {
+  background: rgba(255, 255, 255, 0.95);
+  border-color: rgba(17, 19, 23, 0.16);
+  box-shadow: 0 -6px 18px rgba(17, 19, 23, 0.1);
+}
+
+/* Left Card (Stack Pills) */
+.fp-sheet-left {
+  z-index: 1;
+  padding: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  gap: 6px;
+  transform: translateY(-10px) rotate(-3deg) scale(0.95);
+}
+
+.fp-sheet-tag {
+  padding: 3px 8px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.09);
+  color: #f3f2ee;
+  font-size: 0.68rem;
+  font-weight: 600;
+}
+
+[data-theme="light"] .fp-sheet-tag {
+  background: #f1efe9;
+  color: #111317;
+}
+
+/* Center Card (Project Screenshot) */
+.fp-sheet-center {
+  z-index: 2;
+  left: 6%;
+  right: 6%;
+  background: #0c0d0f;
+  transform: translateY(-18px) scale(0.98);
+}
+
+.fp-sheet-center img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Right Card (Benchmark Metric) */
+.fp-sheet-right {
+  z-index: 1;
+  padding: 12px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-start;
+  transform: translateY(-10px) rotate(3deg) scale(0.95);
+}
+
+.fp-sheet-metric {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: var(--accent-crimson);
+}
+
+/* Front Outer Box — Color Gradient + Higher Transparency */
+.fp-folder-front {
+  position: absolute;
+  z-index: 3;
+  inset: 64px 0 0 0;
+  padding: 14px 16px 16px;
+  border-radius: 10px;
+  background: linear-gradient(
+    135deg,
+    rgba(224, 62, 54, 0.22) 0%,
+    rgba(37, 99, 235, 0.14) 52%,
+    rgba(19, 21, 25, 0.56) 100%
+  );
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.32);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transform-origin: bottom center;
+  transition:
+    transform 460ms var(--fp-ease),
+    border-color 280ms ease,
+    box-shadow 320ms ease,
+    background 280ms ease;
+}
+
+[data-theme="light"] .fp-folder-front {
+  background: linear-gradient(
+    135deg,
+    rgba(208, 164, 162, 0.18) 0%,
+    rgba(120, 135, 168, 0.12) 52%,
+    rgba(248, 247, 243, 0.58) 100%
+  );
+  border-color: rgba(17, 19, 23, 0.18);
+  box-shadow: 0 -6px 20px rgba(17, 19, 23, 0.1);
+}
+
+.fp-folder-front-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.fp-folder-index {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+}
+
+.fp-folder-front-bottom {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.fp-folder-name {
+  margin: 0;
+  font-size: clamp(1.18rem, 1.5vw, 1.38rem);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: var(--text-main);
+}
+
+.fp-folder-arrow {
+  flex: 0 0 34px;
+  width: 34px;
+  height: 34px;
+  border-radius: 7px;
+  display: grid;
+  place-items: center;
+  background: #f3f2ee;
+  color: #0c0d0f;
+  transition:
+    background-color 240ms ease,
+    color 240ms ease,
+    transform 320ms var(--fp-spring);
+}
+
+[data-theme="light"] .fp-folder-arrow {
+  background: #111317;
+  color: #f6f5f1;
+}
+
+/* ==========================================================================
+   HOVER & FOCUS-VISIBLE — 3 CARDS POP UP AND CLIMB HIGHER
+   ========================================================================== */
+.fp-folder-item:hover .fp-folder-back,
+.fp-folder-item:hover .fp-folder-tab,
+.fp-folder-link:focus-visible .fp-folder-back,
+.fp-folder-link:focus-visible .fp-folder-tab {
+  border-color: var(--accent-crimson);
+}
+
+.fp-folder-item:hover .fp-sheet-left,
+.fp-folder-link:focus-visible .fp-sheet-left {
+  transform: translate(-16px, -74px) rotate(-11deg) scale(1);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.35);
+}
+
+.fp-folder-item:hover .fp-sheet-center,
+.fp-folder-link:focus-visible .fp-sheet-center {
+  transform: translateY(-92px) scale(1.05);
+  border-color: var(--accent-crimson);
+  box-shadow: 0 18px 34px rgba(0, 0, 0, 0.42);
+}
+
+.fp-folder-item:hover .fp-sheet-right,
+.fp-folder-link:focus-visible .fp-sheet-right {
+  transform: translate(16px, -74px) rotate(11deg) scale(1);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.35);
+}
+
+.fp-folder-item:hover .fp-folder-front,
+.fp-folder-link:focus-visible .fp-folder-front {
+  transform: rotateX(-15deg) translateY(5px);
+  border-color: rgba(224, 62, 54, 0.55);
+}
+
+.fp-folder-item:hover .fp-folder-arrow,
+.fp-folder-link:focus-visible .fp-folder-arrow {
+  background: var(--accent-crimson);
+  color: #ffffff;
+  transform: translate(2px, -2px) scale(1.06);
+}
+
+/* ==========================================================================
+   METADATA ROW BELOW EACH FOLDER
+   ========================================================================== */
+.fp-meta-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-top: 0.95rem;
+  padding-inline: 2px;
+}
+
+.fp-meta-desc {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.fp-meta-cta {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--text-main);
+  transition: color 200ms ease;
+}
+
+.fp-folder-item:hover .fp-meta-cta {
+  color: var(--accent-crimson);
+}
+
+/* ==========================================================================
+   REDUCED MOTION SUPPORT
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  .fp-sheet,
+  .fp-folder-front,
+  .fp-folder-arrow,
+  .fp-github-link {
+    transition: none !important;
+  }
+}
